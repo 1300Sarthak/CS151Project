@@ -1,5 +1,6 @@
 package mancala;
 
+<<<<<<< HEAD
 public class MancalaIterator implements IteratorInterface{
 
 	private int[] board;
@@ -37,4 +38,25 @@ public class MancalaIterator implements IteratorInterface{
 			board[]
 		}
 	}
+=======
+public class MancalaIterator implements IteratorInterface {
+    private int[] pits;
+    private int index;
+
+    public MancalaIterator(int[] pits) {
+        this.pits = pits;
+        this.index = 0;
+    }
+
+    @Override
+    public boolean hasNext() {
+        return index < pits.length;
+    }
+
+    @Override
+    public int next() {
+        return pits[index++];
+    }
+>>>>>>> a3a722b512006b3b273fbfe6b6d5fc60bd059059
 }
+
