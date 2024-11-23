@@ -1,81 +1,67 @@
-package mancala;
-import java.util.*;
-
-<<<<<<< HEAD
-public class MancalaBoard {
-	private int[] board;
-	private int turn;
-	
-	/**
-	 * Underlying data structure for MancalaBoard. Using array for quick indexing/population.
-	 * i = 6 contains player 1's Mancala, i = 13 contains player 2's mancala
-	 * 
-	 */
-	public MancalaBoard()
-	{
-		board = new int[14];
-		turn = 0;
-	}
-	
-	/**
-	 * Fills the mancala pits with the specified number of marbles. Marbles must be 0 < marbles <= 4
-	 * @param marbles
-	 */
-	public void fill(int marbles)
-	{
-		if (marbles < 0 || marbles > 4)
-		{
-			System.out.println("Incompatible marble count");
-			return;
-		}
-		else
-		{
-			for (int i = 0; i < board.length; i++)
-			{
-				if (i == 6 || i == 13)
-				{
-					board[i] = 0;
-				}
-				else
-				{
-					board[i] = marbles;
-				}
-			}
-		}
-	}
-	
-	public void take()
-	{
-		
-	}
-	
-	public void deposit()
-	{
-		
-	}
-}
-=======
 import java.util.ArrayList;
 import java.util.Stack;
 
 public class MancalaBoard {
-    private int[] pitsA; //pits for player A
-    private int[] pitsB; //pits for player B
-    private int mancalaA; //mncala for player A
-    private int mancalaB; //mancala for player B
+    private int[] pits; //Changed to congregate pits into 1 array for one iterator.
+    private ArrayList<MancalaListener> listenerList; //To add listeners for the DS.
 
     public MancalaBoard(int initialStones) {
-        pitsA = new int[6];
-        pitsB = new int[6];
-        for (int i = 0; i < 6; i++) {
-            pitsA[i] = initialStones;
-            pitsB[i] = initialStones;
+    	//pits[0, 6] to be player A's mancala side, with 6 being Mancala A, and [7, 13] for player B, with 13 being Mancala B.
+        pits = new int[14];
+        for (int i = 0; i < pits.length; i++)
+        {
+        	pits[i] = initialStones;
         }
-        mancalaA = 0;
-        mancalaB = 0;
+        
+        listenerList = new ArrayList<MancalaListener>();
     }
 
     // will add more methods in the future to handle the game logic (moving /capturing stones)
+    
+    /**
+     * Vincent Pangilinan
+     * Adding attach method for listeners.
+     */
+    
+    public void attach(MancalaListener listener)
+    {
+    	listenerList.add(listener);
+    }
+    
+    /**
+     * Vincent Pangilinan
+     * Adding notifier methods for listeners.
+     */
+    public void notifyListener()
+    {
+    	for (MancalaListener listener : listenerList)
+    	{
+    		listener.changed();
+    	}
+    }
+    
+    /**
+     * Vincent Pangilinan
+     * Adding Iterator method.
+     */
+    public MancalaIterator mancalaIterator()
+    {
+    	return new MancalaIterator(pits, 0);
+    }
+    
+    /**
+     * Vincent Pangilinan
+     * Move method for taking stones. Sets current index value to 0, distributes stones until out of stones. Congregates a move and deposit method.
+     */
+    public void move(int index)
+    {
+    	int taken = pits[index]; //temporary holder for distribution.
+    	pits[index] = 0; 
+    	for (int i = index + 1; i <= taken; i++) //start at the pit after the selected pit, continue until value is reached.
+    	{
+    		pits[i] += 1;
+    	}
+    }
 
     /**
      * Nikki Huynh 
@@ -121,4 +107,4 @@ public class MancalaBoard {
 
     // still need to work on updating board after user has selected undo ... 
 }
->>>>>>> a3a722b512006b3b273fbfe6b6d5fc60bd059059
+

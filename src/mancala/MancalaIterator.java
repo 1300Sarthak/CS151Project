@@ -4,9 +4,15 @@ public class MancalaIterator implements IteratorInterface {
     private int[] pits;
     private int index;
 
-    public MancalaIterator(int[] pits) {
+    /**
+     * 
+     * @param pits the model.
+     * @param selectedIndex VP: Changed to set index to equal selectedIndex, the selectedIndex is the
+     * index clicked on by the mouse.
+     */
+    public MancalaIterator(int[] pits, int selectedIndex) {
         this.pits = pits;
-        this.index = 0;
+        index = selectedIndex; //This is so we can start the iterator at the selected pit.
     }
 
     @Override

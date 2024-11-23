@@ -3,6 +3,7 @@ package mancala;
 public class MancalaController {
     private MancalaBoard board;
     private MancalaView view;
+    private MancalaIterator iterator;
 
     public MancalaController(MancalaBoard board, MancalaView view) {
         this.board = board;
