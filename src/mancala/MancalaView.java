@@ -1,6 +1,6 @@
 package mancala;
 
-public class MancalaView extends JPanel {
+public class MancalaView extends JPanel implements MancalaListener{
     private MancalaBoard board;
 
     public MancalaView(MancalaBoard board) {
