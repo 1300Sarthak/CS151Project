@@ -4,6 +4,7 @@ import java.util.Stack;
 public class MancalaBoard {
     private int[] pits; //Changed to congregate pits into 1 array for one iterator.
     private ArrayList<MancalaListener> listenerList; //To add listeners for the DS.
+    private int turn;
 
     public MancalaBoard(int initialStones) {
     	//pits[0, 6] to be player A's mancala side, with 6 being Mancala A, and [7, 13] for player B, with 13 being Mancala B.
@@ -14,6 +15,36 @@ public class MancalaBoard {
         }
         
         listenerList = new ArrayList<MancalaListener>();
+        turn = 0;
+    }
+    
+    /**
+     * Vincent Pangilinan
+     * Progresses the turn.
+     */
+    public void turn()
+    {
+    	turn++;
+    }
+    
+    /**
+     * Vincent Pangilinan
+     * 
+     * @return turn the turn count.
+     */
+    public int getTurnCount()
+    {
+    	return turn;
+    }
+    
+    /**
+     * Vincent Pangilinan
+     * 
+     * @return pits the underlying data structure.
+     */
+    public int[] getArray()
+    {
+    	return pits;
     }
 
     // will add more methods in the future to handle the game logic (moving /capturing stones)
