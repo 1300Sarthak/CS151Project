@@ -5,6 +5,11 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Nikki Huynh
+ * Added GUI for Mancala game.
+ * May still need to adjust to fit rest of code.
+ */
 public class MancalaView extends JFrame {
     private final Map<String, PitPanel> pitPanels;
 
