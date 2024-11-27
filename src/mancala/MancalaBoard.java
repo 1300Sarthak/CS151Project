@@ -1,3 +1,4 @@
+import java.lang.classfile.BootstrapMethodEntry;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -136,6 +137,18 @@ public class MancalaBoard {
         selectedUndos = 0; 
     }
 
-    // still need to work on updating board after user has selected undo ... 
+    public void updateBoard(int pitIndex, boolean isPlayerA) {
+        int stones = board.get(pitIndex);
+        board.set(pitIndex, 0);
+
+        int currentIndex = pitIndex;
+        while(stones > 0) {
+            currentIndex = (currentIndex + 1) % 14; // to traverse index through board
+            if((isPlayerA && currentIndex != 13) || (!isPlayerA && currentIndex != 6)) {
+                board.set(currentIndex, board.get(currentIndex) + 1);
+                stones--;
+            }
+        }
+    }
 }
 
