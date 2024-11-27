@@ -1,30 +1,32 @@
 package mancala;
-import javax.swing.*;
-import java.awt.*;
 
-<<<<<<< HEAD
-public class MancalaView extends JPanel implements MancalaListener{
-    private MancalaBoard board;
-    private JButton undoButton;
-    private JButton formatOne;
-    private JButton formatTwo;
-=======
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
->>>>>>> bdbcb1e3c9d99a0fbc5c4cefed8ded95ce76b677
+
 
 /**
  * Nikki Huynh
  * Added GUI for Mancala game.
  * May still need to adjust to fit rest of code.
  */
+
+/**
+ * Vincent Pangilinan
+ * Added JButtons. 
+ */
 public class MancalaView extends JFrame {
     private final Map<String, PitPanel> pitPanels;
+    private JButton undoButton;
+    private JButton formatOne;
+    private JButton formatTwo;
 
     public MancalaView() {
         pitPanels = new HashMap<>();
+        undoButton = new JButton("Undo");
+        formatOne = new JButton("Format 1");
+        formatTwo = new JButton("Format 2");
         initializeGUI();
     }
     
@@ -97,6 +99,16 @@ public class MancalaView extends JFrame {
 
         boardPanel.add(pitsPanel, BorderLayout.CENTER);
         add(boardPanel, BorderLayout.CENTER);
+        
+        /**
+         * Vincent
+         * Control Panel
+         */
+        JPanel controlPanel = new JPanel();
+        controlPanel.add(undoButton);
+        controlPanel.add(formatOne);
+        controlPanel.add(formatTwo);
+        add(controlPanel, BorderLayout.SOUTH);
 
         setVisible(true);
     }
@@ -108,9 +120,7 @@ public class MancalaView extends JFrame {
             pit.repaint();
         }
     }
-<<<<<<< HEAD
-}
-=======
+
 
     private static class PitPanel extends JPanel {
         private final String pitName;
@@ -174,4 +184,4 @@ public class MancalaView extends JFrame {
         }
     }
 }
->>>>>>> bdbcb1e3c9d99a0fbc5c4cefed8ded95ce76b677
+
