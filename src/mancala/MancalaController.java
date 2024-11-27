@@ -15,4 +15,20 @@ public class MancalaController {
         //update the model based on the selected pit
         //call view.refresh() to update the UI
     }
+    
+    /**
+     * Method to connect undo method in model to action in controller.
+     */
+    private void undo()
+    {
+    	
+    }
+    
+    /**
+     * 
+     */
+    private void move()
+    {
+    	
+    }
 }

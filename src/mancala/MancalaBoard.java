@@ -1,3 +1,4 @@
+package mancala;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -77,7 +78,7 @@ public class MancalaBoard {
      */
     public MancalaIterator mancalaIterator()
     {
-    	return new MancalaIterator(pits, 0);
+    	return new MancalaIterator(pits);
     }
     
     /**
