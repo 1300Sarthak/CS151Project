@@ -8,6 +8,13 @@ public class MancalaBoard {
     private int turn;
 
     public MancalaBoard(int initialStones) {
+        /**
+         * Nikki Huynh
+         * Initialize board and undoFunction - only the following 2 lines
+         */
+        this.board = new ArrayList<>();
+        this.undoFunction = new Stack<>();
+        this.selectedUndos = 0;
     	//pits[0, 6] to be player A's mancala side, with 6 being Mancala A, and [7, 13] for player B, with 13 being Mancala B.
         pits = new int[14];
         for (int i = 0; i < pits.length; i++)
@@ -111,13 +118,13 @@ public class MancalaBoard {
     }
 
     public void saveCurrentBoard() {
-        undoStack.push(new ArrayList<>(board)); // save the current state of the baord
+        undoFunction.push(new ArrayList<>(board)); // save the current state of the baord
         selectedUndos = 0; //user has not selected to undo yet
     }
 
     public boolean undo() {
-        if(!undoFunction.isEmpty() && undoCount < maxUndo) {
-            ArrayList<Integer> previousBoardState = undoStack.pop();
+        if(!undoFunction.isEmpty() && selectedUndos < maxUndo) {
+            ArrayList<Integer> previousBoardState = undoFunction.pop();
             for(int i = 0; i < board.size(); i++) {
                 board.set(i, previousBoardState.get(i));
             }
