@@ -1,19 +1,15 @@
 package mancala;
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
-<<<<<<< HEAD
 public class MancalaView extends JPanel implements MancalaListener{
     private MancalaBoard board;
     private JButton undoButton;
     private JButton formatOne;
     private JButton formatTwo;
-=======
-import javax.swing.*;
-import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
->>>>>>> bdbcb1e3c9d99a0fbc5c4cefed8ded95ce76b677
+
 
 /**
  * Nikki Huynh

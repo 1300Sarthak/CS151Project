@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 package mancala;
-=======
-import java.lang.classfile.BootstrapMethodEntry;
->>>>>>> bdbcb1e3c9d99a0fbc5c4cefed8ded95ce76b677
 import java.util.ArrayList;
 import java.util.Stack;
 
