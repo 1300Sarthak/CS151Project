@@ -8,6 +8,9 @@ public class MancalaController {
     public MancalaController(MancalaBoard board, MancalaView view) {
         this.board = board;
         this.view = view;
+        iterator = board.mancalaIterator();
+        
+        view.getUndoButton().addActionListener(event -> undo());
         //will add listeners in the future to this, so that we can handle all the ations from the users
     }
 
@@ -21,7 +24,8 @@ public class MancalaController {
      */
     private void undo()
     {
-    	
+    	board.undo();
+    	view.changed();
     }
     
     /**
@@ -29,6 +33,6 @@ public class MancalaController {
      */
     private void move()
     {
-    	
+    	iterator.next();
     }
 }

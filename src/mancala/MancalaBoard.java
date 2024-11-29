@@ -6,24 +6,29 @@ public class MancalaBoard {
     private int[] pits; //Changed to congregate pits into 1 array for one iterator.
     private ArrayList<MancalaListener> listenerList; //To add listeners for the DS.
     private int turn;
+    private Stack<ArrayList<Integer>> undoFunction;
+    private int selectedUndos; // how many times the player has already used the undo function
+    private static final int MAX_UNDOS = 3;
+    private final ArrayList<Integer> board;
 
     public MancalaBoard(int initialStones) {
-        /**
-         * Nikki Huynh
-         * Initialize board and undoFunction - only the following 2 lines
-         */
-        this.board = new ArrayList<>();
-        this.undoFunction = new Stack<>();
-        this.selectedUndos = 0;
     	//pits[0, 6] to be player A's mancala side, with 6 being Mancala A, and [7, 13] for player B, with 13 being Mancala B.
-        pits = new int[14];
-        for (int i = 0; i < pits.length; i++)
+        board = new ArrayList<>(14);
+    	//pits = new int[14];
+        for (int i = 0; i < 14; i++)
         {
-        	pits[i] = initialStones;
+        	if(i != 6 && i != 13) {
+        		pits[i] = initialStones; // add initial stones to pits
+        	}
+        	else {
+        		board.add(0); // 0 stones for Mancala A and B
+        	}
         }
         
-        listenerList = new ArrayList<MancalaListener>();
+        listenerList = new ArrayList<>();
+        undoFunction = new Stack<>();
         turn = 0;
+        selectedUndos = 0;
     }
     
     /**
@@ -101,49 +106,66 @@ public class MancalaBoard {
     		pits[i] += 1;
     	}
     }
-
-    /**
-     * Nikki Huynh 
-     * Attempt for undo function using ArrayList and Stack.
-     */
-    private final ArrayList<Integer> board;
-    private final Stack<ArrayList<Integer>> undoFunction; 
-    private final int maxUndo = 3;
-    private int selectedUndos; // how many times the player has already used the undo function
     
-    // set up the board; will update once we have finalized the board setup; using ArrayList might be ideal
-
+   /**
+    * Nikki Huynh
+    * Get the current state of the board
+    * @return board ArrayList with the current state of the board.
+    */
     public ArrayList<Integer> currentBoardState() {
         return new ArrayList<>(board); // gets current state of the board
     }
 
+    /**
+     * Nikki Huynh
+     * Saves the current state of the board.
+     */
     public void saveCurrentBoard() {
         undoFunction.push(new ArrayList<>(board)); // save the current state of the baord
         selectedUndos = 0; //user has not selected to undo yet
     }
 
+    /**
+     * Nikki Huynh
+     * Allows user to undo their last action and restore to previous state, checks that the undo is valid.
+     * @return true if undo function was successful.
+     * @return false if undo function was not successful.
+     */
     public boolean undo() {
-        if(!undoFunction.isEmpty() && selectedUndos < maxUndo) {
-            ArrayList<Integer> previousBoardState = undoFunction.pop();
-            for(int i = 0; i < board.size(); i++) {
-                board.set(i, previousBoardState.get(i));
-            }
-
-            selectedUndos++; // user has selected undo
+        if(!undoFunction.isEmpty() && selectedUndos < MAX_UNDOS) {
+            board.clear(); // clear board
+            board.addAll(undoFunction.pop()); // get previous board state
+            selectedUndos++;
+            notifyListener(); // user has selected undo
             return true; // user was able to undo (did not reach max)
         }
 
         return false; // user was not able to undo (met max)
     }
 
-    public int getSelectedUndos() { // get the count of times user has selected undo
+    /**
+     * Nikki Huynh
+     * Gets the amount of times the user has selected to undo an action.
+     * @return
+     */
+    public int getSelectedUndos() { 
         return selectedUndos;
     }
 
-    public void resetSelectedUndos() { // reset the count of times user has selected undo per new turn
+    /**
+     * Nikki Huynh
+     * Reset selected undo for each new turn.
+     */
+    public void resetSelectedUndos() {
         selectedUndos = 0; 
     }
 
+    /**
+     * Nikki Huynh
+     * Updates the board after user has completed an action.
+     * @param pitIndex - index the stones are being moved from.
+     * @param isPlayerA - checks if it is player A's turn, if not then it is Player B's turn.
+     */
     public void updateBoard(int pitIndex, boolean isPlayerA) {
         int stones = board.get(pitIndex);
         board.set(pitIndex, 0);

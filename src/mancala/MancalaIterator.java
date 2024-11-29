@@ -1,14 +1,15 @@
 package mancala;
+import java.util.ArrayList;
 
 public class MancalaIterator implements IteratorInterface {
-    private int[] pits;
+    private ArrayList<Integer> pits;
     private int index;
 
     /**
      * 
      * @param pits the model.
      */
-    public MancalaIterator(int[] pits) {
+    public MancalaIterator(ArrayList<Integer> pits) {
         this.pits = pits;
     }
     
@@ -23,12 +24,12 @@ public class MancalaIterator implements IteratorInterface {
 
     @Override
     public boolean hasNext() {
-        return index < pits.length;
+        return index < pits.size();
     }
 
     @Override
     public int next() {
-        return pits[index++];
+        return pits.get(index++);
     }
 }
 
