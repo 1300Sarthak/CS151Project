@@ -1,11 +1,11 @@
 package mancala;
+
 import java.util.ArrayList;
 import java.util.Stack;
 
 public class MancalaBoard {
-    private int[] pits; //Changed to congregate pits into 1 array for one iterator.
     private ArrayList<MancalaListener> listenerList; //To add listeners for the DS.
-    private int turn;
+    private int turn; //If turn is odd, then player is A. If turn is even, then player is B.
     private Stack<ArrayList<Integer>> undoFunction;
     private int selectedUndos; // how many times the player has already used the undo function
     private static final int MAX_UNDOS = 3;
@@ -18,7 +18,7 @@ public class MancalaBoard {
         for (int i = 0; i < 14; i++)
         {
         	if(i != 6 && i != 13) {
-        		pits[i] = initialStones; // add initial stones to pits
+        		board.add(i, initialStones); // add initial stones to pits
         	}
         	else {
         		board.add(0); // 0 stones for Mancala A and B
@@ -52,18 +52,6 @@ public class MancalaBoard {
     
     /**
      * Vincent Pangilinan
-     * 
-     * @return pits the underlying data structure.
-     */
-    public int[] getArray()
-    {
-    	return pits;
-    }
-
-    // will add more methods in the future to handle the game logic (moving /capturing stones)
-    
-    /**
-     * Vincent Pangilinan
      * Adding attach method for listeners.
      */
     
@@ -90,7 +78,7 @@ public class MancalaBoard {
      */
     public MancalaIterator mancalaIterator()
     {
-    	return new MancalaIterator(pits);
+    	return new MancalaIterator(board);
     }
     
     /**
@@ -99,11 +87,14 @@ public class MancalaBoard {
      */
     public void move(int index)
     {
-    	int taken = pits[index]; //temporary holder for distribution.
-    	pits[index] = 0; 
+    	int taken = board.get(index); //temporary holder for distribution.
+    	board.set(index, 0); 
     	for (int i = index + 1; i <= taken; i++) //start at the pit after the selected pit, continue until value is reached.
     	{
-    		pits[i] += 1;
+    		if (i != 6 || i != 14)
+    		{
+    			board.set(i, board.get(i) + 1);
+    		}
     	}
     }
     
@@ -164,16 +155,15 @@ public class MancalaBoard {
      * Nikki Huynh
      * Updates the board after user has completed an action.
      * @param pitIndex - index the stones are being moved from.
-     * @param isPlayerA - checks if it is player A's turn, if not then it is Player B's turn.
      */
-    public void updateBoard(int pitIndex, boolean isPlayerA) {
+    public void updateBoard(int pitIndex) {
         int stones = board.get(pitIndex);
         board.set(pitIndex, 0);
 
         int currentIndex = pitIndex;
         while(stones > 0) {
             currentIndex = (currentIndex + 1) % 14; // to traverse index through board
-            if((isPlayerA && currentIndex != 13) || (!isPlayerA && currentIndex != 6)) {
+            if((turn % 2 == 1 && currentIndex != 13) || (turn % 2 == 0 && currentIndex != 6)) {
                 board.set(currentIndex, board.get(currentIndex) + 1);
                 stones--;
             }
