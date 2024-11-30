@@ -35,7 +35,7 @@ public class MancalaBoard {
      * Vincent Pangilinan
      * Progresses the turn.
      */
-    public void turn()
+    public void progressTurn()
     {
     	turn++;
     }
@@ -69,32 +69,6 @@ public class MancalaBoard {
     	for (MancalaListener listener : listenerList)
     	{
     		listener.changed();
-    	}
-    }
-    
-    /**
-     * Vincent Pangilinan
-     * Adding Iterator method.
-     */
-    public MancalaIterator mancalaIterator()
-    {
-    	return new MancalaIterator(board);
-    }
-    
-    /**
-     * Vincent Pangilinan
-     * Move method for taking stones. Sets current index value to 0, distributes stones until out of stones. Congregates a move and deposit method.
-     */
-    public void move(int index)
-    {
-    	int taken = board.get(index); //temporary holder for distribution.
-    	board.set(index, 0); 
-    	for (int i = index + 1; i <= taken; i++) //start at the pit after the selected pit, continue until value is reached.
-    	{
-    		if (i != 6 || i != 14)
-    		{
-    			board.set(i, board.get(i) + 1);
-    		}
     	}
     }
     

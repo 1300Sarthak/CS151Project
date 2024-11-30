@@ -16,15 +16,17 @@ import java.util.Map;
  * Vincent Pangilinan
  * Added JButtons. 
  */
-public class MancalaView extends JFrame {
+public class MancalaView extends JFrame implements MancalaListener{
     private final Map<String, PitPanel> pitPanels;
     private JButton undoButton;
     private JButton formatOne;
     private JButton formatTwo;
+    private JButton nextTurn;
 
     public MancalaView() {
         pitPanels = new HashMap<>();
         undoButton = new JButton("Undo");
+        nextTurn = new JButton("Next Turn");
         formatOne = new JButton("Format 1");
         formatTwo = new JButton("Format 2");
         initializeGUI();
@@ -43,6 +45,16 @@ public class MancalaView extends JFrame {
     public JButton getFormatTwoButton()
     {
     	return formatTwo;
+    }
+    
+    public JButton getNextTurnButton()
+    {
+    	return nextTurn;
+    }
+    
+    public void changed()
+    {
+    	
     }
 
     private void initializeGUI() {

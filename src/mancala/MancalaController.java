@@ -3,14 +3,13 @@ package mancala;
 public class MancalaController {
     private MancalaBoard board;
     private MancalaView view;
-    private MancalaIterator iterator;
 
     public MancalaController(MancalaBoard board, MancalaView view) {
         this.board = board;
         this.view = view;
-        iterator = board.mancalaIterator();
         
         view.getUndoButton().addActionListener(event -> undo());
+        view.getNextTurnButton().addActionListener(event -> board.progressTurn());
         //will add listeners in the future to this, so that we can handle all the ations from the users
     }
 
@@ -33,6 +32,6 @@ public class MancalaController {
      */
     private void move()
     {
-    	iterator.next();
+    	
     }
 }
