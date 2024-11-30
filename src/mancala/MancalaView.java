@@ -1,211 +1,281 @@
 package mancala;
-import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
+
 import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
+public class MancalaView {
+    private final JPanel viewPanel; 
+    private final MancalaBoard board;
+    private final ArrayList<Pit> pits;
 
-
-/**
- * Vincent Pangilinan
- * Added JButtons. 
- */
-public class MancalaView extends JFrame implements MancalaListener{
-    private final Map<String, PitPanel> pitPanels;
-    private JButton undoButton;
-    private JButton formatOne;
-    private JButton formatTwo;
-    private JButton nextTurn;
-
-    public MancalaView() {
-        pitPanels = new HashMap<>();
-        undoButton = new JButton("Undo");
-        nextTurn = new JButton("Next Turn");
-        formatOne = new JButton("Format 1");
-        formatTwo = new JButton("Format 2");
-        initializeGUI();
-    }
-    
-    public JButton getUndoButton()
-    {
-    	return undoButton;
-    }
-    
-    public JButton getFormatOneButton()
-    {
-    	return formatOne;
-    }
-    
-    public JButton getFormatTwoButton()
-    {
-    	return formatTwo;
-    }
-    
-    public JButton getNextTurnButton()
-    {
-    	return nextTurn;
-    }
-    
-    public void changed()
-    {
-    	
-    }
-
-    /**
-     * Nikki Huynh
-     * Initializes the graphical user interface - sets up Mancala A and B and specifies labels across the board. 
-     */
-    private void initializeGUI() {
-        setTitle("Mancala Game");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1000, 500);
-        setLayout(new BorderLayout());
-
-        JPanel boardPanel = new JPanel() {
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                Graphics2D g2d = (Graphics2D) g;
-                g2d.setColor(new Color(184, 134, 11)); 
-                g2d.fillRoundRect(10, 10, getWidth() - 20, getHeight() - 20, 50, 50);
-            }
-        };
-        boardPanel.setLayout(new BorderLayout());
-        boardPanel.setBackground(new Color(139, 69, 19));
-
-        // Mancala B
-        PitPanel mancalaB = new PitPanel("Mancala B", 0, true);
-        pitPanels.put("Mancala B", mancalaB);
-        boardPanel.add(mancalaB, BorderLayout.WEST);
-        mancalaB.setPreferredSize(new Dimension(200, 300));
-
-        // Mancala A
-        PitPanel mancalaA = new PitPanel("Mancala A", 0, true);
-        pitPanels.put("Mancala A", mancalaA);
-        boardPanel.add(mancalaA, BorderLayout.EAST);
-        mancalaA.setPreferredSize(new Dimension(200, 300));
-
-        // Pits
-        JPanel pitsPanel = new JPanel(new GridLayout(2, 6)); // two rows
-        pitsPanel.setOpaque(false);
-
-        String[] topRowLabels = {"B6", "B5", "B4", "B3", "B2", "B1"};
-        for (int i = 0; i < topRowLabels.length; i++) {
-            String label = topRowLabels[i];
-            PitPanel pit = new PitPanel(label, 4);
-            pitPanels.put(label, pit);
-            pit.setPreferredSize(new Dimension(60, 60));
-            pitsPanel.add(pit);
-        }
-
-        String[] bottomRowLabels = {"A1", "A2", "A3", "A4", "A5", "A6"};
-        for (int i = 0; i < bottomRowLabels.length; i++) {
-            String label = bottomRowLabels[i];
-            PitPanel pit = new PitPanel(label, 4);
-            pitPanels.put(label, pit);
-            pit.setPreferredSize(new Dimension(60, 60));
-            pitsPanel.add(pit);
-        }
-
-
-        boardPanel.add(pitsPanel, BorderLayout.CENTER);
-        add(boardPanel, BorderLayout.CENTER);
-        
-        /**
-         * Vincent
-         * Control Panel
-         */
-        JPanel controlPanel = new JPanel();
-        controlPanel.add(undoButton);
-        controlPanel.add(formatOne);
-        controlPanel.add(formatTwo);
-        add(controlPanel, BorderLayout.SOUTH);
-
-        setVisible(true);
-    }
-
-    /**
-     * Nikki Huynh
-     * Update the number of stones in the pits.
-     * @param pitName - the name of the put being updated.
-     * @param stoneCount - the number of stones to be included in specified pit.
-     */
-    public void updatePit(String pitName, int stoneCount) {
-        PitPanel pit = pitPanels.get(pitName);
-        if (pit != null) {
-            pit.setStoneCount(stoneCount);
-            pit.repaint();
+    public MancalaView(MancalaBoard board, String format) {
+        this.board = board;
+        pits = new ArrayList<>(14); 
+        viewPanel = new JPanel(new BorderLayout());
+        if ("Format1".equalsIgnoreCase(format)) {
+            viewPanel.add(new Format1(board).getPanel(), BorderLayout.CENTER);
+        } else if ("Format2".equalsIgnoreCase(format)) {
+            viewPanel.add(new Format2(board).getPanel(), BorderLayout.CENTER);
+        } else {
+            throw new IllegalArgumentException("Invalid format");
         }
     }
 
-    /**
-     * Nikki Huynh
-     * Sets up the view of the pit panel - the size and color.
-     */
-    private static class PitPanel extends JPanel {
-        private final String pitName;
-        private int stoneCount;
-        private final boolean isMancala;
+    public JPanel getPanel() {
+        return viewPanel;
+    }
+    
+    public void switchFormat(String format) {
+        viewPanel.removeAll();
+        if ("Format1".equalsIgnoreCase(format)) {
+            viewPanel.add(new Format1(board).getPanel(), BorderLayout.CENTER);
+        } else if ("Format2".equalsIgnoreCase(format)) {
+            viewPanel.add(new Format2(board).getPanel(), BorderLayout.CENTER);
+        } else {
+            throw new IllegalArgumentException("Invalid format");
+        }
+        viewPanel.revalidate();
+        viewPanel.repaint();
+    }
 
-        public PitPanel(String pitName, int stoneCount) {
-            this(pitName, stoneCount, false);
+    private class Format1 {
+        private final JPanel panel;
+
+        public Format1(MancalaBoard board) {
+            panel = new JPanel();
+            panel.setLayout(new BorderLayout());
+            panel.setBackground(new Color(184, 134, 11)); // Board color
+            initializeBoard(board);
         }
 
-        public PitPanel(String pitName, int stoneCount, boolean isMancala) {
-            this.pitName = pitName;
-            this.stoneCount = stoneCount;
-            this.isMancala = isMancala;
-            if (isMancala) {
-                setPreferredSize(new Dimension(100, 300));
-            } else {
-                setPreferredSize(new Dimension(60, 60));
+        private void initializeBoard(MancalaBoard board) {
+            JPanel pitsPanel = new JPanel(new GridLayout(2, 6));
+            pitsPanel.setOpaque(false); 
+
+            Pit mancalaA = createPit("Mancala A", board.currentBoardState().get(6), true);
+            Pit mancalaB = createPit("Mancala B", board.currentBoardState().get(13), true);
+            pits.add(mancalaA);
+            pits.add(mancalaB);
+
+            panel.add(mancalaB, BorderLayout.WEST);
+            panel.add(mancalaA, BorderLayout.EAST);
+
+            String[] topRow = {"B6", "B5", "B4", "B3", "B2", "B1"};
+            String[] bottomRow = {"A1", "A2", "A3", "A4", "A5", "A6"};
+
+            for (String label : topRow) {
+                Pit pit = createPit(label, board.currentBoardState().get(getPitIndex(label)), false);
+                pits.add(pit);
+                pitsPanel.add(pit);
             }
 
-            setBackground(new Color(211, 168, 118)); 
-        }
-
-        public void setStoneCount(int stoneCount) {
-            this.stoneCount = stoneCount;
-        }
-
-        /**
-         * Nikki Huynh
-         * Paints the components of the Mancala Board game and initializes the size and colors of the pits, the board, as well as the labels.
-         * @param g - graphics to be painted
-         */
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            Graphics2D g2d = (Graphics2D) g;
-
-            g2d.setColor(new Color(126, 100, 70)); 
-            if (isMancala) {
-                g2d.fillRoundRect(10, 10, getWidth() - 20, getHeight() - 20, 50, 50);
-            } else {
-                g2d.fillRoundRect(10, 10, getWidth() - 20, getHeight() - 20, 30, 30);
+            for (String label : bottomRow) {
+                Pit pit = createPit(label, board.currentBoardState().get(getPitIndex(label)), false);
+                pits.add(pit);
+                pitsPanel.add(pit);
             }
 
-            // Stones
-            g2d.setColor(Color.BLACK);
-            int x = 20;
-            int y = 20;
-            int stoneDiameter = 25;
-            for (int i = 0; i < stoneCount; i++) {
-                g2d.fillOval(x, y, stoneDiameter, stoneDiameter);
-                x += stoneDiameter + 5;
-                if (x + stoneDiameter > getWidth() - 20) {
-                    x = 20;
-                    y += stoneDiameter + 5;
+            panel.add(pitsPanel, BorderLayout.CENTER);
+        }
+
+        private Pit createPit(String name, int stones, boolean isMancala) {
+            return new Pit(name, stones, isMancala);
+        }
+
+        private int getPitIndex(String label) {
+            switch (label) {
+                case "A1": return 0;
+                case "A2": return 1;
+                case "A3": return 2;
+                case "A4": return 3;
+                case "A5": return 4;
+                case "A6": return 5;
+                case "B1": return 7;
+                case "B2": return 8;
+                case "B3": return 9;
+                case "B4": return 10;
+                case "B5": return 11;
+                case "B6": return 12;
+                default: return -1; 
+            }
+        }
+
+        public JPanel getPanel() {
+            return panel;
+        }
+
+        private class Pit extends JPanel {
+            private final String pitName;
+            private int stoneCount;
+            private final boolean isMancala;
+
+            public Pit(String pitName, int stoneCount, boolean isMancala) {
+                this.pitName = pitName;
+                this.stoneCount = stoneCount;
+                this.isMancala = isMancala;
+                setOpaque(false);
+                if (isMancala) {
+                    setPreferredSize(new Dimension(100, 300));
+                } else {
+                    setPreferredSize(new Dimension(80, 80));
                 }
             }
 
-            // Draw pit name
-            g2d.setColor(Color.WHITE);
-            FontMetrics metrics = g2d.getFontMetrics();
-            int labelWidth = metrics.stringWidth(pitName);
-            int xLabel = (getWidth() - labelWidth) / 2;  // x-coordinate for text
-            int yLabel = getHeight() - 10;  // y-coordinate for text
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
 
-            g2d.drawString(pitName, xLabel, yLabel);  // label at bottom center of pits
+                g2d.setColor(new Color(126, 100, 70)); // pit color
+                if (isMancala) {
+                    g2d.fillRoundRect(10, 10, getWidth() - 20, getHeight() - 20, 50, 50); 
+                } else {
+                    g2d.fillRoundRect(10, 10, getWidth() - 20, getHeight() - 20, 20, 20); 
+                }
+
+                g2d.setColor(Color.BLACK);
+                int x = 20;
+                int y = 20;
+                int stoneDiameter = 25;
+                for (int i = 0; i < stoneCount; i++) {
+                    g2d.fillOval(x, y, stoneDiameter, stoneDiameter);
+                    x += stoneDiameter + 5; 
+                    if (x + stoneDiameter > getWidth() - 20) {
+                        x = 20; 
+                        y += stoneDiameter + 5; 
+                    }
+                }
+
+                g2d.setColor(Color.WHITE);
+                FontMetrics metrics = g2d.getFontMetrics();
+                int labelWidth = metrics.stringWidth(pitName);
+                int xLabel = (getWidth() - labelWidth) / 2; // center text
+                int yLabel = getHeight() - 10; 
+                g2d.drawString(pitName, xLabel, yLabel); // pit name
+            }
+        }
+    }
+
+    private class Format2 {
+        private final JPanel panel;
+
+        public Format2(MancalaBoard board) {
+            panel = new JPanel();
+            panel.setLayout(new BorderLayout());
+            panel.setBackground(new Color(50, 205, 50)); 
+            initializeBoard(board);
+        }
+
+        private void initializeBoard(MancalaBoard board) {
+            JPanel pitsPanel = new JPanel(new GridLayout(2, 6));
+            pitsPanel.setOpaque(false);
+
+            Pit mancalaA = createPit("Mancala A", board.currentBoardState().get(6), true);
+            Pit mancalaB = createPit("Mancala B", board.currentBoardState().get(13), true);
+            pits.add(mancalaA);
+            pits.add(mancalaB);
+
+            panel.add(mancalaB, BorderLayout.WEST);
+            panel.add(mancalaA, BorderLayout.EAST);
+
+            // top and bottom rows
+            String[] topRow = {"B6", "B5", "B4", "B3", "B2", "B1"};
+            String[] bottomRow = {"A1", "A2", "A3", "A4", "A5", "A6"};
+
+            for (String label : topRow) {
+                Pit pit = createPit(label, board.currentBoardState().get(getPitIndex(label)), false);
+                pits.add(pit);
+                pitsPanel.add(pit);
+            }
+
+            for (String label : bottomRow) {
+                Pit pit = createPit(label, board.currentBoardState().get(getPitIndex(label)), false);
+                pits.add(pit);
+                pitsPanel.add(pit);
+            }
+
+            panel.add(pitsPanel, BorderLayout.CENTER);
+        }
+
+        private Pit createPit(String name, int stones, boolean isMancala) {
+            return new Pit(name, stones, isMancala);
+        }
+
+        private int getPitIndex(String label) {
+            switch (label) {
+                case "A1": return 0;
+                case "A2": return 1;
+                case "A3": return 2;
+                case "A4": return 3;
+                case "A5": return 4;
+                case "A6": return 5;
+                case "B1": return 7;
+                case "B2": return 8;
+                case "B3": return 9;
+                case "B4": return 10;
+                case "B5": return 11;
+                case "B6": return 12;
+                default: return -1; // Invalid label
+            }
+        }
+
+        public JPanel getPanel() {
+            return panel;
+        }
+
+        private class Pit extends JPanel {
+            private final String pitName;
+            private int stoneCount;
+            private final boolean isMancala;
+
+            public Pit(String pitName, int stoneCount, boolean isMancala) {
+                this.pitName = pitName;
+                this.stoneCount = stoneCount;
+                this.isMancala = isMancala;
+                setOpaque(false);
+                if (isMancala) {
+                    setPreferredSize(new Dimension(100, 300));
+                } else {
+                    setPreferredSize(new Dimension(80, 80));
+                }
+            }
+
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
+
+                // Draw pit
+                g2d.setColor(new Color(126, 100, 70)); // pit color
+                if (isMancala) {
+                    g2d.fillRoundRect(10, 10, getWidth() - 20, getHeight() - 20, 50, 50); 
+                } else {
+                    g2d.fillRoundRect(10, 10, getWidth() - 20, getHeight() - 20, 20, 20); 
+                }
+
+                // stones
+                g2d.setColor(Color.BLACK);
+                int x = 20;
+                int y = 20;
+                int stoneDiameter = 25;
+                for (int i = 0; i < stoneCount; i++) {
+                    g2d.fillOval(x, y, stoneDiameter, stoneDiameter);
+                    x += stoneDiameter + 5; // Add space between stones
+                    if (x + stoneDiameter > getWidth() - 20) {
+                        x = 20; // Reset x position for next row of stones
+                        y += stoneDiameter + 5; // Move down to the next row
+                    }
+                }
+
+                // Draw pit name
+                g2d.setColor(Color.WHITE);
+                FontMetrics metrics = g2d.getFontMetrics();
+                int labelWidth = metrics.stringWidth(pitName);
+                int xLabel = (getWidth() - labelWidth) / 2; // Center  text
+                int yLabel = getHeight() - 10;
+                g2d.drawString(pitName, xLabel, yLabel); // Draw pit name
+            }
         }
     }
 }
-
