@@ -1,16 +1,10 @@
 package mancala;
-import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
+import javax.swing.*;
 
 
-
-/**
- * Nikki Huynh
- * Added GUI for Mancala game.
- * May still need to adjust to fit rest of code.
- */
 
 /**
  * Vincent Pangilinan
@@ -57,6 +51,10 @@ public class MancalaView extends JFrame implements MancalaListener{
     	
     }
 
+    /**
+     * Nikki Huynh
+     * Initializes the graphical user interface - sets up Mancala A and B and specifies labels across the board. 
+     */
     private void initializeGUI() {
         setTitle("Mancala Game");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -125,6 +123,12 @@ public class MancalaView extends JFrame implements MancalaListener{
         setVisible(true);
     }
 
+    /**
+     * Nikki Huynh
+     * Update the number of stones in the pits.
+     * @param pitName - the name of the put being updated.
+     * @param stoneCount - the number of stones to be included in specified pit.
+     */
     public void updatePit(String pitName, int stoneCount) {
         PitPanel pit = pitPanels.get(pitName);
         if (pit != null) {
@@ -133,7 +137,10 @@ public class MancalaView extends JFrame implements MancalaListener{
         }
     }
 
-
+    /**
+     * Nikki Huynh
+     * Sets up the view of the pit panel - the size and color.
+     */
     private static class PitPanel extends JPanel {
         private final String pitName;
         private int stoneCount;
@@ -160,6 +167,11 @@ public class MancalaView extends JFrame implements MancalaListener{
             this.stoneCount = stoneCount;
         }
 
+        /**
+         * Nikki Huynh
+         * Paints the components of the Mancala Board game and initializes the size and colors of the pits, the board, as well as the labels.
+         * @param g - graphics to be painted
+         */
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
             Graphics2D g2d = (Graphics2D) g;
