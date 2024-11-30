@@ -1,5 +1,6 @@
 package mancala;
 
+import javax.swing.*;
 
 public class MancalaGUI {
     public static void main(String[] args) {
