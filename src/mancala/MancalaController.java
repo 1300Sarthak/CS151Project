@@ -1,4 +1,5 @@
 package mancala;
+import java.awt.event.*;
 
 public class MancalaController {
     private MancalaBoard board;
@@ -9,7 +10,11 @@ public class MancalaController {
         this.view = view;
         
         view.getUndoButton().addActionListener(event -> undo());
-        view.getNextTurnButton().addActionListener(event -> board.progressTurn());
+        view.getNextTurnButton().addActionListener(event -> {
+        														board.progressTurn();
+        														board.resetSelectedUndos();
+        													});
+        view.addMouseListener(new PitClicker());
         //will add listeners in the future to this, so that we can handle all the ations from the users
     }
 
@@ -27,11 +32,11 @@ public class MancalaController {
     	view.changed();
     }
     
-    /**
-     * 
-     */
-    private void move()
+    private class PitClicker extends MouseAdapter
     {
-    	
+    	public void clickPit(MouseEvent event)
+    	{
+    		
+    	}
     }
 }
