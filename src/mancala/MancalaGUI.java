@@ -21,8 +21,8 @@ public class MancalaGUI {
         }
 
         this.board = new MancalaBoard(stonesPerPit); 
-        this.controller = new MancalaController(board);
         this.view = new MancalaView(board, "Format1"); // Default to Format1
+        this.controller = new MancalaController(board, view);
         initializeUI();
     }
 

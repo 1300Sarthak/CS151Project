@@ -2,6 +2,51 @@ package mancala;
 
 import javax.swing.*;
 import java.awt.*;
+
+public class Format2 implements FormatStrategy {
+    private final MancalaBoard board;
+
+    public Format2(MancalaBoard board) {
+        this.board = board;
+    }
+
+    public JPanel getPanel() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+
+        JPanel pitsPanel = new JPanel(new GridLayout(2, 6, 10, 10));  
+        pitsPanel.setOpaque(false);
+
+        Pit mancalaA = new Pit("Mancala A", board.currentBoardState().get(6), true, 6);
+        Pit mancalaB = new Pit("Mancala B", board.currentBoardState().get(13), true, 13);
+
+        mancalaA.setPreferredSize(new Dimension(100, 200)); 
+        mancalaB.setPreferredSize(new Dimension(100, 200)); 
+
+        panel.add(mancalaB, BorderLayout.WEST); 
+        panel.add(mancalaA, BorderLayout.EAST); 
+
+        String[] pitLabelsB = {"B6", "B5", "B4", "B3", "B2", "B1"};
+        for (int i = 0; i < 6; i++) {
+            Pit pit = new Pit(pitLabelsB[i], board.currentBoardState().get(i), false, i);
+            pit.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));  
+            pitsPanel.add(pit); 
+        }
+
+        String[] pitLabelsA = {"A1", "A2", "A3", "A4", "A5", "A6"};
+        for (int i = 7; i < 13; i++) {
+            Pit pit = new Pit(pitLabelsA[i - 7], board.currentBoardState().get(i), false, i);
+            pit.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));  
+            pitsPanel.add(pit);  
+        }
+
+       
+        panel.add(pitsPanel, BorderLayout.CENTER);
+
+        return panel;
+    }
+}
+/*
 import java.util.ArrayList;
 
 public class Format2 extends FormatStrategy {
@@ -123,4 +168,4 @@ public class Format2 extends FormatStrategy {
         }
     }
 }
-
+*/

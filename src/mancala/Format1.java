@@ -4,12 +4,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Format1 extends FormatStrategy {
+public class Format1 implements FormatStrategy {
     private final JPanel panel;
     private final ArrayList<Pit> pits;
+    private final MancalaBoard board;
 
     public Format1(MancalaBoard board) {
-        super(board);
+        //super(board);
+        this.board = board;
         this.panel = new JPanel();
         this.pits = new ArrayList<>(14);
         panel.setLayout(new BorderLayout());
@@ -41,6 +43,36 @@ public class Format1 extends FormatStrategy {
 
     public JPanel getPanel() {
         return panel;
+    }
+
+    private void initializeBoard(MancalaBoard board) {
+        JPanel pitsPanel = new JPanel(new GridLayout(2, 6));
+        pitsPanel.setOpaque(false);
+
+        Pit mancalaA = createPit("Mancala A", board.currentBoardState().get(6), true);
+        Pit mancalaB = createPit("Mancala B", board.currentBoardState().get(13), true);
+        pits.add(mancalaA);
+        pits.add(mancalaB);
+
+        panel.add(mancalaB, BorderLayout.WEST);
+        panel.add(mancalaA, BorderLayout.EAST);
+
+        String[] topRow = {"B6", "B5", "B4", "B3", "B2", "B1"};
+        String[] bottomRow = {"A1", "A2", "A3", "A4", "A5", "A6"};
+
+        for (String label : topRow) {
+            Pit pit = createPit(label, board.currentBoardState().get(getPitIndex(label)), false);
+            pits.add(pit);
+            pitsPanel.add(pit);
+        }
+
+        for (String label : bottomRow) {
+            Pit pit = createPit(label, board.currentBoardState().get(getPitIndex(label)), false);
+            pits.add(pit);
+            pitsPanel.add(pit);
+        }
+
+        panel.add(pitsPanel, BorderLayout.CENTER);
     }
 
     private class Pit extends JPanel {

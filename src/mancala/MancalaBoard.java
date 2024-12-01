@@ -147,5 +147,13 @@ public class MancalaBoard {
             }
         }
     }
+
+    public void switchPlayer() {
+        turn++;
+    }
+
+    public String getCurrentPlayer() {
+        return (turn % 2 == 0) ? "Player A" : "Player B";
+    }
 }
 

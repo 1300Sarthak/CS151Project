@@ -1,7 +1,6 @@
 package mancala;
 
 import javax.swing.*;
-
 import java.awt.*;
 import java.util.ArrayList;
 import java.awt.event.MouseAdapter;
@@ -26,6 +25,10 @@ public class MancalaView extends JFrame implements MancalaListener{
         } else {
             throw new IllegalArgumentException("Invalid format");
         }
+
+        //initialize undo and next turn button
+        undoButton = new JButton("Undo");
+        nextTurnButton = new JButton("Next Turn");
     }
     
     public void changed()
@@ -97,6 +100,4 @@ public class MancalaView extends JFrame implements MancalaListener{
         viewPanel.revalidate();
         viewPanel.repaint();
     }
-
-    
 }

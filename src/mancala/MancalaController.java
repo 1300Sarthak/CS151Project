@@ -1,6 +1,5 @@
 package mancala;
 import java.awt.event.*;
-import javax.swing.*;
 
 public class MancalaController {
     private MancalaBoard board;
@@ -12,15 +11,15 @@ public class MancalaController {
         
         view.getUndoButton().addActionListener(event -> undo());
         view.getNextTurnButton().addActionListener(event -> {
-        														board.progressTurn();
-        														board.resetSelectedUndos();
-        													});
+            board.progressTurn();
+            board.resetSelectedUndos();
+        });
         
         for (Pit pit : view.getPitList())
         {
         	if (pit != null)
         	{
-        		pit.addMouseListener(new PitClicker());
+        		pit.addMouseListener(new PitClicker(pit));
         	}
         }
         //will add listeners in the future to this, so that we can handle all the ations from the users
@@ -29,7 +28,7 @@ public class MancalaController {
     /**
      * Method to connect undo method in model to action in controller.
      */
-    private void undo()
+    public void undo()
     {
     	board.undo();
     	view.changed();
@@ -37,10 +36,24 @@ public class MancalaController {
     
     private class PitClicker extends MouseAdapter
     {
+        private final Pit pit;
+
+        public PitClicker(Pit pit) {
+            this.pit = pit;
+        }
+        
+
+        private void clickPit(MouseEvent e) {
+            int pitIndex = pit.getIndex();
+            board.updateBoard(pitIndex);
+    		view.changed();
+        }
+        /*
     	private void clickPit(int pitIndex)
     	{
     		board.updateBoard(pitIndex);
     		view.changed();
     	}
+        */
     }
 }
