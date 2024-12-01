@@ -1,5 +1,6 @@
 package mancala;
 import java.awt.event.*;
+import javax.swing.*;
 
 public class MancalaController {
     private MancalaBoard board;
@@ -14,13 +15,15 @@ public class MancalaController {
         														board.progressTurn();
         														board.resetSelectedUndos();
         													});
-        view.addMouseListener(new PitClicker());
+        
+        for (Pit pit : view.getPitList())
+        {
+        	if (pit != null)
+        	{
+        		pit.addMouseListener(new PitClicker());
+        	}
+        }
         //will add listeners in the future to this, so that we can handle all the ations from the users
-    }
-
-    public void handlePitSelection(int pitIndex, boolean isPlayerA) {
-        //update the model based on the selected pit
-        //call view.refresh() to update the UI
     }
     
     /**
@@ -34,9 +37,10 @@ public class MancalaController {
     
     private class PitClicker extends MouseAdapter
     {
-    	public void clickPit(MouseEvent event)
+    	private void clickPit(int pitIndex)
     	{
-    		
+    		board.updateBoard(pitIndex);
+    		view.changed();
     	}
     }
 }

@@ -9,7 +9,7 @@ public class MancalaBoard {
     private Stack<ArrayList<Integer>> undoFunction;
     private int selectedUndos; // how many times the player has already used the undo function
     private static final int MAX_UNDOS = 3;
-    private final ArrayList<Integer> board;
+    private ArrayList<Integer> board;
 
     public MancalaBoard(int initialStones) {
     	//pits[0, 6] to be player A's mancala side, with 6 being Mancala A, and [7, 13] for player B, with 13 being Mancala B.
@@ -31,6 +31,10 @@ public class MancalaBoard {
         selectedUndos = 0;
     }
     
+    public ArrayList<Integer> getBoard()
+    {
+    	return board;
+    }
     /**
      * Vincent Pangilinan
      * Progresses the turn.
@@ -68,7 +72,7 @@ public class MancalaBoard {
     {
     	for (MancalaListener listener : listenerList)
     	{
-    		listener.changed();
+    		listener.notify();
     	}
     }
     
