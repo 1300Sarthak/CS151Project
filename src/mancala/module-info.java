@@ -4,6 +4,7 @@
 /**
  * 
  */
-module Mancala02 {
+module CS151Project {
     requires java.desktop;
+    requires java.base;
 }

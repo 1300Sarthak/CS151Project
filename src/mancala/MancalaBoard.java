@@ -6,7 +6,8 @@ import java.util.Stack;
 public class MancalaBoard {
     private ArrayList<MancalaListener> listenerList; //To add listeners for the DS.
     private int turn; //If turn is odd, then player is B. If turn is even, then player is A.
-    private Stack<ArrayList<Integer>> undoStack;
+    //private Stack<ArrayList<Integer>> undoStack;
+    private SingleStack<ArrayList<Integer>> uStack; //Added by Vincent.
     private Stack<Integer> turnStack;  // Added to track turns for undo
     private int selectedUndos; // how many times the player has already used the undo function
     private static final int MAX_UNDOS = 3;
@@ -28,7 +29,8 @@ public class MancalaBoard {
         }
         
         listenerList = new ArrayList<>();
-        undoStack = new Stack<>();
+        //undoStack = new Stack<>();
+        uStack = new SingleStack<ArrayList<Integer>>();
         turnStack = new Stack<>();
         turn = 0;
         selectedUndos = 0;
@@ -50,7 +52,8 @@ public class MancalaBoard {
         if (!lastMoveEndedInMancala) {
             turn++;
             selectedUndos = 0;
-            undoStack.clear(); // Clear undo stack for new turn
+            //undoStack.clear(); // Clear undo stack for new turn
+            uStack.clear();
             turnStack.clear(); // Clear turn stack as well
             notifyListeners();
         }
@@ -102,15 +105,19 @@ public class MancalaBoard {
      * Saves the current state of the board.
      */
     public void saveCurrentBoard() {
-        undoStack.push(new ArrayList<>(board));// save the current state of the baord
+        //undoStack.push(new ArrayList<>(board));// save the current state of the baord
+        uStack.push(new ArrayList<>(board));
         turnStack.push(turn);
         selectedUndos = 0;//user has not selected to undo yet
     }
 
 
     public boolean undo() {
-        if (!undoStack.isEmpty() && selectedUndos < MAX_UNDOS) {
-            board = new ArrayList<>(undoStack.pop());
+        //if (!undoStack.isEmpty() && selectedUndos <= MAX_UNDOS) //Changed < to <= to have 3 undos.
+    	if (!uStack.isEmpty() && selectedUndos <= MAX_UNDOS)
+        {
+            //board = new ArrayList<>(undoStack.pop());
+    		board = new ArrayList<>(uStack.pop());
             if (!turnStack.isEmpty()) {
                 turn = turnStack.pop();
             }
@@ -130,8 +137,10 @@ public class MancalaBoard {
         saveCurrentBoard();
         
         if (!isValidMove(pitIndex)) {
-            if (!undoStack.isEmpty()) {
-                undoStack.pop();
+            //if (!undoStack.isEmpty()) {
+        	if (!uStack.isEmpty()) {
+                //undoStack.pop();
+        		uStack.pop();
                 turnStack.pop();
             }
             return;
@@ -236,5 +245,45 @@ public class MancalaBoard {
         }
         
         return playerASideEmpty || playerBSideEmpty;
+    }
+    
+    private final class SingleStack<E> {
+    	private Stack<E> stack;
+    	private final int size = 1;
+    	
+    	private SingleStack()
+    	{
+    		stack = new Stack<>();
+    	}
+    	
+    	private void push(E move)
+    	{
+    		if (stack.size() >= size)
+    		{
+    			stack.clear();
+    		}
+    			stack.push(move);
+    	}
+    	
+    	public E pop() 
+    	{
+    		if (stack.isEmpty()) return null;
+    		else
+    		{
+    			return stack.pop();
+    		}
+    	}
+    	
+    	public void clear()
+    	{
+    		stack.clear();
+    	}
+    	
+    	public boolean isEmpty()
+    	{
+    		if (stack != null) return false;
+    		else
+    			return true;
+    	}
     }
 }
