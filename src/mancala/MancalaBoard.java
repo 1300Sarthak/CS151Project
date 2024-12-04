@@ -117,6 +117,12 @@ public class MancalaBoard {
     	return uStack.isEmpty();
     }
     
+    /**
+     * Nikki Huynh
+     * Allows user to undo their last action and restore to previous state, checks that the undo is valid.
+     * @return true if undo function was successful.
+     * @return false if undo function was not successful.
+     */
     public boolean undo() {
         //if (!undoStack.isEmpty() && selectedUndos <= MAX_UNDOS) //Changed < to <= to have 3 undos.
     	if (!uStack.isEmpty() && selectedUndos < MAX_UNDOS)
