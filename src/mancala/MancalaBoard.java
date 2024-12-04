@@ -124,7 +124,7 @@ public class MancalaBoard {
             //board = new ArrayList<>(undoStack.pop());
     		board = new ArrayList<>(uStack.pop());
             if (!turnStack.isEmpty()) {
-                turn = turnStack.pop();
+                //turn = turnStack.pop();
             }
             selectedUndos++;
             notifyListeners();
