@@ -1,8 +1,8 @@
 package mancala;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import javax.swing.*;
 
 public class Format1 implements FormatStrategy {
     private final JPanel panel;
@@ -19,8 +19,8 @@ public class Format1 implements FormatStrategy {
         initializeBoard(board);
     }
 
-    private Pit createPit(String name, int stones, boolean isMancala) {
-        return new Pit(name, stones, isMancala);
+    private Pit createPit(String name, int stones, boolean isMancala, int index) {
+        return new Pit(name, stones, isMancala, index);
     }
 
     private int getPitIndex(String label) {
@@ -37,7 +37,7 @@ public class Format1 implements FormatStrategy {
             case "B4": return 10;
             case "B5": return 11;
             case "B6": return 12;
-            default: return -1; // Invalid label
+            default: return -1;  // Invalid label
         }
     }
 
@@ -49,8 +49,9 @@ public class Format1 implements FormatStrategy {
         JPanel pitsPanel = new JPanel(new GridLayout(2, 6));
         pitsPanel.setOpaque(false);
 
-        Pit mancalaA = createPit("Mancala A", board.currentBoardState().get(6), true);
-        Pit mancalaB = createPit("Mancala B", board.currentBoardState().get(13), true);
+        // Create Mancalas
+        Pit mancalaA = createPit("Mancala A", board.currentBoardState().get(6), true, 6);
+        Pit mancalaB = createPit("Mancala B", board.currentBoardState().get(13), true, 13);
         pits.add(mancalaA);
         pits.add(mancalaB);
 
@@ -60,14 +61,18 @@ public class Format1 implements FormatStrategy {
         String[] topRow = {"B6", "B5", "B4", "B3", "B2", "B1"};
         String[] bottomRow = {"A1", "A2", "A3", "A4", "A5", "A6"};
 
+        // Add B's pits (top row)
         for (String label : topRow) {
-            Pit pit = createPit(label, board.currentBoardState().get(getPitIndex(label)), false);
+            int index = getPitIndex(label);
+            Pit pit = createPit(label, board.currentBoardState().get(index), false, index);
             pits.add(pit);
             pitsPanel.add(pit);
         }
 
+        // Add A's pits (bottom row)
         for (String label : bottomRow) {
-            Pit pit = createPit(label, board.currentBoardState().get(getPitIndex(label)), false);
+            int index = getPitIndex(label);
+            Pit pit = createPit(label, board.currentBoardState().get(index), false, index);
             pits.add(pit);
             pitsPanel.add(pit);
         }
@@ -75,54 +80,63 @@ public class Format1 implements FormatStrategy {
         panel.add(pitsPanel, BorderLayout.CENTER);
     }
 
-    private class Pit extends JPanel {
-        private final String pitName;
-        private int stoneCount;
-        private final boolean isMancala;
+    public ArrayList<Pit> getPits() {
+        return pits;
 
-        public Pit(String pitName, int stoneCount, boolean isMancala) {
-            this.pitName = pitName;
-            this.stoneCount = stoneCount;
-            this.isMancala = isMancala;
-            setOpaque(false);
-            if (isMancala) {
-                setPreferredSize(new Dimension(100, 300));
-            } else {
-                setPreferredSize(new Dimension(80, 80));
-            }
-        }
 
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            Graphics2D g2d = (Graphics2D) g;
 
-            g2d.setColor(new Color(126, 100, 70)); // pit color
-            if (isMancala) {
-                g2d.fillRoundRect(10, 10, getWidth() - 20, getHeight() - 20, 50, 50); 
-            } else {
-                g2d.fillRoundRect(10, 10, getWidth() - 20, getHeight() - 20, 20, 20); 
-            }
+    // private class Pit extends JPanel {
+    //     private final String pitName;
+    //     private int stoneCount;
+    //     private final boolean isMancala;
 
-            g2d.setColor(Color.BLACK);
-            int x = 20;
-            int y = 20;
-            int stoneDiameter = 25;
-            for (int i = 0; i < stoneCount; i++) {
-                g2d.fillOval(x, y, stoneDiameter, stoneDiameter);
-                x += stoneDiameter + 5; 
-                if (x + stoneDiameter > getWidth() - 20) {
-                    x = 20; 
-                    y += stoneDiameter + 5; 
-                }
-            }
+    //     public Pit(String pitName, int stoneCount, boolean isMancala) {
+    //         this.pitName = pitName;
+    //         this.stoneCount = stoneCount;
+    //         this.isMancala = isMancala;
+    //         setOpaque(false);
+    //         if (isMancala) {
+    //             setPreferredSize(new Dimension(100, 300));
+    //         } else {
+    //             setPreferredSize(new Dimension(80, 80));
+    //         }
+    //     }
 
-            g2d.setColor(Color.WHITE);
-            FontMetrics metrics = g2d.getFontMetrics();
-            int labelWidth = metrics.stringWidth(pitName);
-            int xLabel = (getWidth() - labelWidth) / 2; // center text
-            int yLabel = getHeight() - 10; 
-            g2d.drawString(pitName, xLabel, yLabel); // draw pit name
-        }
+    //     protected void paintComponent(Graphics g) {
+    //         super.paintComponent(g);
+    //         Graphics2D g2d = (Graphics2D) g;
+
+    //         g2d.setColor(new Color(126, 100, 70)); // pit color
+    //         if (isMancala) {
+    //             g2d.fillRoundRect(10, 10, getWidth() - 20, getHeight() - 20, 50, 50); 
+    //         } else {
+    //             g2d.fillRoundRect(10, 10, getWidth() - 20, getHeight() - 20, 20, 20); 
+    //         }
+
+    //         g2d.setColor(Color.BLACK);
+    //         int x = 20;
+    //         int y = 20;
+    //         int stoneDiameter = 25;
+    //         for (int i = 0; i < stoneCount; i++) {
+    //             g2d.fillOval(x, y, stoneDiameter, stoneDiameter);
+    //             x += stoneDiameter + 5; 
+    //             if (x + stoneDiameter > getWidth() - 20) {
+    //                 x = 20; 
+    //                 y += stoneDiameter + 5; 
+    //             }
+    //         }
+
+    //         g2d.setColor(Color.WHITE);
+    //         FontMetrics metrics = g2d.getFontMetrics();
+    //         int labelWidth = metrics.stringWidth(pitName);
+    //         int xLabel = (getWidth() - labelWidth) / 2; // center text
+    //         int yLabel = getHeight() - 10; 
+    //         g2d.drawString(pitName, xLabel, yLabel); // draw pit name
+    //     }
+
+
+
+
+
     }
 }
-
