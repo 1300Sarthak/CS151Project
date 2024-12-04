@@ -112,7 +112,11 @@ public class MancalaBoard {
         //selectedUndos = 0;//user has not selected to undo yet
     }
 
-
+    public boolean checkStackEmpty()
+    {
+    	return uStack.isEmpty();
+    }
+    
     public boolean undo() {
         //if (!undoStack.isEmpty() && selectedUndos <= MAX_UNDOS) //Changed < to <= to have 3 undos.
     	if (!uStack.isEmpty() && selectedUndos <= MAX_UNDOS)
@@ -285,9 +289,7 @@ public class MancalaBoard {
     	
     	public boolean isEmpty()
     	{
-    		if (stack != null) return false;
-    		else
-    			return true;
+    		return stack.isEmpty();
     	}
     }
 }

@@ -64,11 +64,17 @@ public class MancalaGUI {
         });
 
         undoButton.addActionListener(e -> {
+        	if (board.checkStackEmpty())
+        	{
+        		JOptionPane.showMessageDialog(frame, "Please make a move first.");
+        		return;
+        	}
             if (board.undo()) {
                 undoCountLabel.setText("Undos remaining: " + (3 - board.getSelectedUndos()));
                 view.changed();
             } else {
                 JOptionPane.showMessageDialog(frame, "No more undos available for this turn!");
+                return;
             }
         });
 
