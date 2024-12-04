@@ -1,46 +1,43 @@
 package mancala;
 
 import java.util.ArrayList;
-import java.util.Stack;
 
 public class MancalaBoard {
     private ArrayList<MancalaListener> listenerList; //To add listeners for the DS.
     private int turn; //If turn is odd, then player is B. If turn is even, then player is A.
-    //private Stack<ArrayList<Integer>> undoStack;
-    private SingleStack<ArrayList<Integer>> uStack; //Added by Vincent.
-    private Stack<Integer> turnStack;  // Added to track turns for undo
+    private ArrayList<Integer> previousBoard; // Store only the previous state
+    private int previousTurn; // Store the previous turn
     private int selectedUndos; // how many times the player has already used the undo function
     private static final int MAX_UNDOS = 3;
     private ArrayList<Integer> board;
     private boolean lastMoveEndedInMancala;
+    private boolean canUndo; // Track if undo is allowed
 
     public MancalaBoard(int initialStones) {
-    	//pits[0, 6] to be player A's mancala side, with 6 being Mancala A, and [7, 13] for player B, with 13 being Mancala B.
+        //pits[0, 6] to be player A's mancala side, with 6 being Mancala A, and [7, 13] for player B, with 13 being Mancala B.
         board = new ArrayList<>(14);
-    	//pits = new int[14];
+        //pits = new int[14];
         for (int i = 0; i < 14; i++)
         {
-        	if(i != 6 && i != 13) {
-        		board.add(i, initialStones); // add initial stones to pits
-        	}
-        	else {
-        		board.add(0); // 0 stones for Mancala A and B
-        	}
+            if(i != 6 && i != 13) {
+                board.add(i, initialStones); // add initial stones to pits
+            }
+            else {
+                board.add(0); // 0 stones for Mancala A and B
+            }
         }
         
         listenerList = new ArrayList<>();
-        //undoStack = new Stack<>();
-        uStack = new SingleStack<ArrayList<Integer>>();
-        turnStack = new Stack<>();
         turn = 0;
         selectedUndos = 0;
         lastMoveEndedInMancala = false;
+        canUndo = false;
+        previousBoard = null;
     }
     
-
     public ArrayList<Integer> getBoard()
     {
-    	return board;
+        return board;
     }
 
     /**
@@ -51,11 +48,9 @@ public class MancalaBoard {
     {
         if (!lastMoveEndedInMancala) {
             turn++;
-            //selectedUndos = 0;
             resetSelectedUndos();
-            //undoStack.clear(); // Clear undo stack for new turn
-            uStack.clear();
-            turnStack.clear(); // Clear turn stack as well
+            previousBoard = null; // Clear previous state
+            canUndo = false; // Reset undo availability
             notifyListeners();
         }
         lastMoveEndedInMancala = false;
@@ -68,7 +63,7 @@ public class MancalaBoard {
      */
     public int getTurnCount()
     {
-    	return turn;
+        return turn;
     }
     
     /**
@@ -77,7 +72,7 @@ public class MancalaBoard {
      */
     public void attach(MancalaListener listener)
     {
-    	listenerList.add(listener);
+        listenerList.add(listener);
     }
     
     /**
@@ -86,10 +81,10 @@ public class MancalaBoard {
      */
     private void notifyListeners()
     {
-    	for (MancalaListener listener : listenerList)
-    	{
-    		listener.changed();
-    	}
+        for (MancalaListener listener : listenerList)
+        {
+            listener.changed();
+        }
     }
     
     /**
@@ -105,16 +100,10 @@ public class MancalaBoard {
      * Nikki Huynh
      * Saves the current state of the board.
      */
-    public void saveCurrentBoard() {
-        //undoStack.push(new ArrayList<>(board));// save the current state of the baord
-        uStack.push(new ArrayList<>(board));
-        turnStack.push(turn);
-        //selectedUndos = 0;//user has not selected to undo yet
-    }
-
-    public boolean checkStackEmpty()
-    {
-    	return uStack.isEmpty();
+    private void saveCurrentBoard() {
+        previousBoard = new ArrayList<>(board);
+        previousTurn = turn;
+        canUndo = true;
     }
     
     /**
@@ -124,42 +113,29 @@ public class MancalaBoard {
      * @return false if undo function was not successful.
      */
     public boolean undo() {
-        //if (!undoStack.isEmpty() && selectedUndos <= MAX_UNDOS) //Changed < to <= to have 3 undos.
-    	if (!uStack.isEmpty() && selectedUndos < MAX_UNDOS)
-        {
-            //board = new ArrayList<>(undoStack.pop());
-    		board = new ArrayList<>(uStack.pop());
-            if (!turnStack.isEmpty()) {
-                turn = turnStack.pop();
-            }
+        if (previousBoard != null && canUndo && selectedUndos < MAX_UNDOS) {
+            board = new ArrayList<>(previousBoard);
+            turn = previousTurn;
             selectedUndos++;
+            canUndo = false; // Prevent multiple undos in a row
             notifyListeners();
             return true;
-        }
-        else {
-            progressTurn();
         }
         return false;
     }
     
-     /**
+    /**
      * Nikki Huynh
      * Updates the board after user has completed an action.
      * @param pitIndex - index the stones are being moved from.
      */
     public void updateBoard(int pitIndex) {
-        saveCurrentBoard();
-        
         if (!isValidMove(pitIndex)) {
-            //if (!undoStack.isEmpty()) {
-        	if (!uStack.isEmpty()) {
-                //undoStack.pop();
-        		uStack.pop();
-                turnStack.pop();
-            }
             return;
         }
 
+        saveCurrentBoard(); // Save state before making the move
+        
         int stones = board.get(pitIndex);
         board.set(pitIndex, 0);
         
@@ -194,10 +170,6 @@ public class MancalaBoard {
             }
         }
         
-        if (!lastMoveEndedInMancala) {
-            turn++;
-        }
-        
         notifyListeners();
     }
 
@@ -221,12 +193,11 @@ public class MancalaBoard {
     /**
      * Nikki Huynh
      * Gets the amount of times the user has selected to undo an action.
-     * @return
+     * @return selectedUndos number of times undo has been used in current turn
      */
     public int getSelectedUndos() { 
         return selectedUndos;
     }
-
 
     /**
      * Nikki Huynh
@@ -265,7 +236,6 @@ public class MancalaBoard {
         }
         
         return false;
-        //return playerASideEmpty || playerBSideEmpty;
     }
 
     /**
@@ -281,43 +251,5 @@ public class MancalaBoard {
             board.set(13, board.get(13) + board.get(i));
             board.set(i, 0);
         }
-    }
-    
-    private final class SingleStack<E> {
-    	private Stack<E> stack;
-    	private final int size = 1;
-    	
-    	private SingleStack()
-    	{
-    		stack = new Stack<>();
-    	}
-    	
-    	private void push(E move)
-    	{
-    		if (stack.size() >= size)
-    		{
-    			stack.clear();
-    		}
-    			stack.push(move);
-    	}
-    	
-    	public E pop() 
-    	{
-    		if (stack.isEmpty()) return null;
-    		else
-    		{
-    			return stack.pop();
-    		}
-    	}
-    	
-    	public void clear()
-    	{
-    		stack.clear();
-    	}
-    	
-    	public boolean isEmpty()
-    	{
-    		return stack.isEmpty();
-    	}
     }
 }
