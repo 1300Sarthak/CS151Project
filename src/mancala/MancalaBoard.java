@@ -51,7 +51,8 @@ public class MancalaBoard {
     {
         if (!lastMoveEndedInMancala) {
             turn++;
-            selectedUndos = 0;
+            //selectedUndos = 0;
+            resetSelectedUndos();
             //undoStack.clear(); // Clear undo stack for new turn
             uStack.clear();
             turnStack.clear(); // Clear turn stack as well
@@ -108,7 +109,7 @@ public class MancalaBoard {
         //undoStack.push(new ArrayList<>(board));// save the current state of the baord
         uStack.push(new ArrayList<>(board));
         turnStack.push(turn);
-        selectedUndos = 0;//user has not selected to undo yet
+        //selectedUndos = 0;//user has not selected to undo yet
     }
 
 
@@ -124,6 +125,9 @@ public class MancalaBoard {
             selectedUndos++;
             notifyListeners();
             return true;
+        }
+        else {
+            progressTurn();
         }
         return false;
     }
