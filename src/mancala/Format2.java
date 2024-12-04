@@ -18,7 +18,7 @@ public class Format2 implements FormatStrategy {
             pits.add(null);
         }
         panel.setLayout(new BorderLayout());
-        panel.setBackground(new Color(50, 205, 50)); // Board color
+        panel.setBackground(new Color(0, 0, 0)); // Board color
         initializeBoard();
     }
 
