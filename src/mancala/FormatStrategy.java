@@ -2,6 +2,10 @@ package mancala;
 
 import javax.swing.*;
 
+public interface FormatStrategy {
+    JPanel getPanel();
+}
+/*
 public abstract class FormatStrategy {
     protected MancalaBoard board;
     
@@ -11,4 +15,5 @@ public abstract class FormatStrategy {
 
     public abstract JPanel getPanel();
 }
+*/
 
