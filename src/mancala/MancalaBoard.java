@@ -117,6 +117,12 @@ public class MancalaBoard {
     	return uStack.isEmpty();
     }
     
+    /**
+     * Nikki Huynh
+     * Allows user to undo their last action and restore to previous state, checks that the undo is valid.
+     * @return true if undo function was successful.
+     * @return false if undo function was not successful.
+     */
     public boolean undo() {
         //if (!undoStack.isEmpty() && selectedUndos <= MAX_UNDOS) //Changed < to <= to have 3 undos.
     	if (!uStack.isEmpty() && selectedUndos < MAX_UNDOS)
@@ -251,8 +257,30 @@ public class MancalaBoard {
                 break;
             }
         }
+
+        if(playerASideEmpty || playerBSideEmpty) {
+            getRemainingStones();
+            notifyListeners();
+            return true;
+        }
         
-        return playerASideEmpty || playerBSideEmpty;
+        return false;
+        //return playerASideEmpty || playerBSideEmpty;
+    }
+
+    /**
+     * Nikki Huynh
+     * When the game is over, add remaining stones in the Players' pits to their resepective mancala.
+     */
+    private void getRemainingStones() {
+        for(int i = 0; i < 6; i++) { //Player A
+            board.set(6, board.get(6) + board.get(i));
+            board.set(i, 0);
+        }
+        for(int i = 7; i < 13; i++) { //Player B
+            board.set(13, board.get(13) + board.get(i));
+            board.set(i, 0);
+        }
     }
     
     private final class SingleStack<E> {

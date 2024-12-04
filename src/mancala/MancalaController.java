@@ -113,6 +113,7 @@ public class MancalaController {
         }
         
         private void handleGameOver() {
+            board.isGameOver();
             // Calculate final scores
             int playerAScore = board.currentBoardState().get(6);
             int playerBScore = board.currentBoardState().get(13);

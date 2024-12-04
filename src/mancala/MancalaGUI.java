@@ -6,7 +6,7 @@ import javax.swing.*;
 public class MancalaGUI {
     private final MancalaBoard board;
     private MancalaView view;
-    private JLabel turnLabel;
+    //private JLabel turnLabel;
     private JLabel undoCountLabel;
 
     public MancalaGUI() {
@@ -30,11 +30,11 @@ public class MancalaGUI {
 
         // Status Panel (Top)x
         JPanel statusPanel = new JPanel(new FlowLayout());
-        turnLabel = new JLabel("Current Turn: Player A");
+        //turnLabel = new JLabel("Current Turn: Player A");
         undoCountLabel = new JLabel("Undos remaining: " + (3 - board.getSelectedUndos()));
-        turnLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        //turnLabel.setFont(new Font("Arial", Font.BOLD, 16));
         undoCountLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        statusPanel.add(turnLabel);
+        //statusPanel.add(turnLabel);
         statusPanel.add(Box.createHorizontalStrut(20));
         statusPanel.add(undoCountLabel);
         frame.add(statusPanel, BorderLayout.NORTH);
@@ -80,7 +80,7 @@ public class MancalaGUI {
 
         endTurnButton.addActionListener(e -> {
             board.progressTurn();
-            turnLabel.setText("Current Turn: " + board.getCurrentPlayer());
+            //turnLabel.setText("Current Turn: " + board.getCurrentPlayer());
             undoCountLabel.setText("Undos remaining: 3");
             view.changed();
         });
