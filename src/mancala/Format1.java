@@ -14,11 +14,14 @@ public class Format1 implements FormatStrategy {
         this.board = board;
         this.panel = new JPanel();
         this.pits = new ArrayList<>(14);
+        for(int i = 0; i < 14; i++) { //edited by Nikki Huynh
+            pits.add(null);
+        } //end of edit
         panel.setLayout(new BorderLayout());
         panel.setBackground(new Color(184, 134, 11)); // Board color
         initializeBoard(board);
     }
-
+    /* 
     private Pit createPit(String name, int stones, boolean isMancala, int index) {
         return new Pit(name, stones, isMancala, index);
     }
@@ -44,23 +47,71 @@ public class Format1 implements FormatStrategy {
     public JPanel getPanel() {
         return panel;
     }
+    */
 
     private void initializeBoard(MancalaBoard board) {
-        JPanel pitsPanel = new JPanel(new GridLayout(2, 6));
+        JPanel pitsPanel = new JPanel(new GridLayout(2, 6, 10, 10)); //edited and added (, 10, 10)
         pitsPanel.setOpaque(false);
 
         // Create Mancalas
-        Pit mancalaA = createPit("Mancala A", board.currentBoardState().get(6), true, 6);
-        Pit mancalaB = createPit("Mancala B", board.currentBoardState().get(13), true, 13);
-        pits.add(mancalaA);
-        pits.add(mancalaB);
+        Pit mancalaA = createStyledPit("Mancala A", board.currentBoardState().get(6), true, 6); //edited
+        Pit mancalaB = createStyledPit("Mancala B", board.currentBoardState().get(13), true, 13);
+        //pits.add(mancalaA);
+        //pits.add(mancalaB);
+        pits.set(6, mancalaA);
+        pits.set(13, mancalaB);
 
+        mancalaA.setPreferredSize(new Dimension(100, 200));
+        mancalaB.setPreferredSize(new Dimension(100, 200)); //edit ends 
+        
         panel.add(mancalaB, BorderLayout.WEST);
         panel.add(mancalaA, BorderLayout.EAST);
+        //edit
+        // Add player B's pits 
+        for(int i = 12; i >= 7; i--) {
+            String label = "B" + (13 - i);
+            Pit pit = createStyledPit(label, board.currentBoardState().get(i), false, i);
+            pits.set(i, pit);
+            pitsPanel.add(pit);
+        }
 
+        //Add player A's pits
+        for(int i = 0; i < 6; i++) {
+            String label = "A" + (i + 1);
+            Pit pit = createStyledPit(label, board.currentBoardState().get(i), false, i);
+            pits.set(i, pit);
+            pitsPanel.add(pit);
+        }
+
+        panel.add(pitsPanel, BorderLayout.CENTER);
+    }
+
+    /**
+     * Nikki Huynh
+     * Sets the style and size of the pits and mancalas.
+     */
+    private Pit createStyledPit(String name, int stones, boolean isMancala, int index) {
+        Pit pit = new Pit(name, stones, isMancala, index);
+        pit.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+
+        if(!isMancala) {
+            pit.setBackground(new Color(126, 100, 70));
+            pit.setPreferredSize(new Dimension(100, 300));
+        }
+        else {
+            pit.setBackground(new Color(126, 100, 70));
+            pit.setPreferredSize(new Dimension(80, 80));
+        }
+        return pit;
+    }
+
+    public JPanel getPanel() {
+        return panel;
+    }
+        /*
         String[] topRow = {"B6", "B5", "B4", "B3", "B2", "B1"};
         String[] bottomRow = {"A1", "A2", "A3", "A4", "A5", "A6"};
-
+        
         // Add B's pits (top row)
         for (String label : topRow) {
             int index = getPitIndex(label);
@@ -79,6 +130,7 @@ public class Format1 implements FormatStrategy {
 
         panel.add(pitsPanel, BorderLayout.CENTER);
     }
+    */
 
     public ArrayList<Pit> getPits() {
         return pits;
