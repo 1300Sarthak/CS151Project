@@ -119,7 +119,7 @@ public class MancalaBoard {
     
     public boolean undo() {
         //if (!undoStack.isEmpty() && selectedUndos <= MAX_UNDOS) //Changed < to <= to have 3 undos.
-    	if (!uStack.isEmpty() && selectedUndos <= MAX_UNDOS)
+    	if (!uStack.isEmpty() && selectedUndos < MAX_UNDOS)
         {
             //board = new ArrayList<>(undoStack.pop());
     		board = new ArrayList<>(uStack.pop());
