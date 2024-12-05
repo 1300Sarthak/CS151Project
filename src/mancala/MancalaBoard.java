@@ -19,6 +19,11 @@ public class MancalaBoard {
     private boolean lastMoveEndedInMancala;
     private boolean canUndo; // Track if undo is allowed
 
+    /**
+     * Vincent Pangilinan
+     * Constructor for MancalaBoard, the model for the underlying data structure.
+     * @param initialStones the amount of stones for the pit to start with.
+     */
     public MancalaBoard(int initialStones) {
         board = new ArrayList<>(14);
         for (int i = 0; i < 14; i++)

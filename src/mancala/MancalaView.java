@@ -62,6 +62,10 @@ public class MancalaView extends JFrame implements MancalaListener {
         return viewPanel;
     }
     
+    /**
+     * Context for the strategy pattern. Updates the style of the board.
+     * @param format the name of the formatting pattern.
+     */
     public void switchFormat(String format) {
         viewPanel.removeAll();
         FormatStrategy newFormat;
