@@ -1,10 +1,14 @@
 package mancala;
 
+/**
+ * MancalaView.java : Fall 2024 Dr. Kim's CS151 Team Project Solution.
+ * @author Sarthak Sethi, Vincent Pangilinan, Nikki Huynh.
+ * @version 1.0 12/4/2024
+ */
+
 import java.awt.*;
 import java.util.ArrayList;
 import javax.swing.*;
-//import java.awt.event.MouseAdapter;
-//import java.awt.event.MouseEvent;
 
 public class MancalaView extends JFrame implements MancalaListener {
     private final JPanel viewPanel;

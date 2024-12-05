@@ -1,19 +1,30 @@
 package mancala;
 
+/**
+ * MancalaGUI.java : Fall 2024 Dr. Kim's CS151 Team Project Solution.
+ * @author Sarthak Sethi, Vincent Pangilinan, Nikki Huynh.
+ * @version 1.0 12/4/2024
+ */
+
 import java.awt.*;
 import javax.swing.*;
 
 public class MancalaGUI {
     private final MancalaBoard board;
     private MancalaView view;
-    //private JLabel turnLabel;
     private JLabel undoCountLabel;
 
     public MancalaGUI() {
         String stonesInput = JOptionPane.showInputDialog("Enter the number of stones per pit (3 or 4):");
-        int stonesPerPit = Integer.parseInt(stonesInput);
-        if (stonesPerPit != 3 && stonesPerPit != 4) {
-            JOptionPane.showMessageDialog(null, "Invalid number of stones! Defaulting to 3");
+        int stonesPerPit;
+        try {
+            stonesPerPit = Integer.parseInt(stonesInput);
+            if (stonesPerPit != 3 && stonesPerPit != 4) {
+                JOptionPane.showMessageDialog(null, "Invalid number of stones! Defaulting to 3");
+                stonesPerPit = 3;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Invalid input! Defaulting to 3 stones.");
             stonesPerPit = 3;
         }
 
@@ -30,11 +41,8 @@ public class MancalaGUI {
 
         // Status Panel (Top)x
         JPanel statusPanel = new JPanel(new FlowLayout());
-        //turnLabel = new JLabel("Current Turn: Player A");
-        undoCountLabel = new JLabel("Undos remaining: " + (3 - board.getSelectedUndos()));
-        //turnLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        undoCountLabel = new JLabel("Undos remaining: " + (3 - board.getSelectedUndos()));;
         undoCountLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        //statusPanel.add(turnLabel);
         statusPanel.add(Box.createHorizontalStrut(20));
         statusPanel.add(undoCountLabel);
         frame.add(statusPanel, BorderLayout.NORTH);
@@ -64,23 +72,20 @@ public class MancalaGUI {
         });
 
         undoButton.addActionListener(e -> {
-        	if (board.checkStackEmpty())
-        	{
-        		JOptionPane.showMessageDialog(frame, "Please make a move first.");
-        		return;
-        	}
             if (board.undo()) {
                 undoCountLabel.setText("Undos remaining: " + (3 - board.getSelectedUndos()));
                 view.changed();
             } else {
-                JOptionPane.showMessageDialog(frame, "No more undos available for this turn!");
-                return;
+                if (board.getSelectedUndos() >= 3) {
+                    JOptionPane.showMessageDialog(frame, "No more undos available for this turn!");
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Cannot undo at this time.");
+                }
             }
         });
 
         endTurnButton.addActionListener(e -> {
             board.progressTurn();
-            //turnLabel.setText("Current Turn: " + board.getCurrentPlayer());
             undoCountLabel.setText("Undos remaining: 3");
             view.changed();
         });
@@ -91,7 +96,9 @@ public class MancalaGUI {
         buttonPanel.add(endTurnButton);
         frame.add(buttonPanel, BorderLayout.SOUTH);
 
+        // Set frame properties
         frame.setSize(800, 600);
+        frame.setLocationRelativeTo(null); // Center the frame
         frame.setVisible(true);
     }
 
