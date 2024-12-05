@@ -28,12 +28,18 @@ public class Format2 implements FormatStrategy {
         initializeBoard();
     }
 
+    /**
+     * Sarthak Sethi
+     * Sets up the format and style for the elements within the interface for the Mancala Board.
+     * This is the second format, it may be changed if the player decieds to click on "Format2".
+     * Sets up the format and the style and size of the pits and mancalas.
+     */
     private void initializeBoard() {
         JPanel pitsPanel = new JPanel(new GridLayout(2, 6, 10, 10));
         pitsPanel.setOpaque(false);
         pitsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Create Mancalas
+        // Creates the  Mancalas
         Pit mancalaA = new Pit("Mancala A", board.currentBoardState().get(6), true, 6);
         Pit mancalaB = new Pit("Mancala B", board.currentBoardState().get(13), true, 13);
         pits.set(6, mancalaA);
@@ -66,10 +72,20 @@ public class Format2 implements FormatStrategy {
         panel.add(pitsPanel, BorderLayout.CENTER);
     }
 
+    /**
+     * Sarthak Sethi
+     * This returns the panel for the interface.
+     * @return Jpanel panel for the layout and interface.
+     */
     public JPanel getPanel() {
         return panel;
     }
 
+    /**
+     * Sarthak Sethi
+     * This returns the ArrayList of pits used within the interface for the mancala board.
+     * @return Pit's pits object that contains the particular stones for the game.
+     */
     public ArrayList<Pit> getPits() {
         return pits;
     }
