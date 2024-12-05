@@ -26,6 +26,11 @@ public class MancalaController {
         resetPitListeners();
     }
     
+    /**
+    * Sarthak Sethi
+    * Resets mouse listeners on all pits
+    * by removing existing ones and adding new listeners to non-Mancala pits.
+    */
     public void resetPitListeners() {
         // Remove existing listeners from all pits
         for (Pit pit : view.getPitList()) {
@@ -44,6 +49,11 @@ public class MancalaController {
         }
     }
     
+    /**
+     * Sarthak Sethi
+     * Handles undo action when clicked.
+     * Updates the view if successful or shows a warning if no undos are left for the turn.
+     */
     private void handleUndo() {
         if (board.undo()) {
             view.changed();
@@ -55,12 +65,27 @@ public class MancalaController {
         }
     }
     
+    /**
+     * Sarthak Sethi
+     * Handles next turn action when clicked.
+     * Updates the board and resets the undo count for the new turn.
+     * Updates the view.
+     */
     private void handleNextTurn() {
         board.progressTurn();
         board.resetSelectedUndos();
         view.changed();
     }
     
+    /**
+     * Sarthak Sethi
+     * 
+     * Checks if the given pit is a Mancala pit or not.
+     * A Mancala pit is the storage pit on either side of the board.
+     * 
+     * @param pit the pit to check.
+     * @return true if the pit is a Mancala pit, otherwise false.
+     */
     private boolean isMancalaPit(Pit pit) {
         return pit.getIndex() == 6 || pit.getIndex() == 13;
     }
@@ -72,6 +97,11 @@ public class MancalaController {
             this.pit = pit;
         }
 
+     /**
+      * Sarthak Sethi
+      * Handles pit click events. Updates the board and view if the move is valid, and
+      * checks for game over conditions.
+      */
         @Override
         public void mouseClicked(MouseEvent e) {
             int pitIndex = pit.getIndex();
@@ -88,6 +118,18 @@ public class MancalaController {
             }
         }
         
+        
+        /**
+         * 
+         * Sarthak Sethi
+         * Checks if a given move is valid. A move is invalid if
+         * the pit is empty, or if it's not the current player's turn.
+         * Shows an error message if the move is invalid.
+         * 
+         * 
+         * @param pitIndex the index of the pit to check.
+         * @return true if the move is valid, otherwise false.
+         */
         private boolean isValidMove(int pitIndex) {
             // Check if pit has stones
             if (pit.getStoneCount() == 0) {
@@ -118,6 +160,13 @@ public class MancalaController {
             return true;
         }
         
+        /**
+         * Sarthak Sethi
+         * 
+        * Handles the end-of-game logic
+        * Calculates final scores and displays the results in a JOptionPane and asks if players want to start a new game.
+        * Starts a new game if agreed or closes the game otherwise.
+         */
         private void handleGameOver() {
             board.isGameOver();
             // Calculate final scores
@@ -171,6 +220,14 @@ public class MancalaController {
         }
     }
 
+    /**
+     * Sarthak Sethi 
+     * 
+     * Handle undo action.
+     * 
+     * This method will be called when the player hits the undo button.
+     * It will call the handleUndo method to update the game state.
+     */
     public void undo() {
         handleUndo();
     }

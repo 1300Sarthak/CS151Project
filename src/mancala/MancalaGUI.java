@@ -106,3 +106,4 @@ public class MancalaGUI {
         SwingUtilities.invokeLater(MancalaGUI::new);
     }
 }
+

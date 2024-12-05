@@ -39,6 +39,13 @@ public class MancalaBoard {
         previousBoard = null;
     }
     
+    /**
+     * Sarthak Sethi
+     * Retrieves the current state of the Mancala board.
+     * Return The current layout of the board, including the number of stones in each pit.
+     * 
+     * @return ArrayList<Integer> representing stones in each pit and Mancala.
+     */
     public ArrayList<Integer> getBoard()
     {
         return board;
@@ -177,6 +184,12 @@ public class MancalaBoard {
         notifyListeners();
     }
 
+    /**
+     * Sarthak Sethi
+     * Checks if the given pit index is a valid move.
+     * @param pitIndex the index of the pit to check
+     * @return false if the move is invalid
+     */
     private boolean isValidMove(int pitIndex) {
         if (board.get(pitIndex) == 0) {
             return false;
@@ -211,10 +224,23 @@ public class MancalaBoard {
         selectedUndos = 0;
     }
 
+    /**
+     * Sarthak Sethi
+     * Determines whose turn it is to play based on the current turn count.
+     * 
+     * @return "Player A" if it's Player A's turn, "Player B" if it's Player B's turn.
+     */
     public String getCurrentPlayer() {
         return (turn % 2 == 0) ? "Player A" : "Player B";
     }
 
+    /**
+     * Sarthak Sethi 
+     * Checks if the game has ended.
+     * The game ends when either player A or player B runs out of stones on their side of the board.
+     * When the game ends, the remaining stones are counted, and listeners are notified.
+     * @return true if the game is over false otherwise.
+     */
     public boolean isGameOver() {
         boolean playerASideEmpty = true;
         boolean playerBSideEmpty = true;
