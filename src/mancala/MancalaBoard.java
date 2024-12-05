@@ -230,7 +230,7 @@ public class MancalaBoard {
     }
 
     /**
-     * Sarthak Sethi
+     * Nikki Huynh
      * Determines whose turn it is to play based on the current turn count.
      * 
      * @return "Player A" if it's Player A's turn, "Player B" if it's Player B's turn.
@@ -240,7 +240,7 @@ public class MancalaBoard {
     }
 
     /**
-     * Sarthak Sethi 
+     * Nikki Huynh
      * Checks if the game has ended.
      * The game ends when either player A or player B runs out of stones on their side of the board.
      * When the game ends, the remaining stones are counted, and listeners are notified.

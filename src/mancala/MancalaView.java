@@ -10,6 +10,12 @@ import java.awt.*;
 import java.util.ArrayList;
 import javax.swing.*;
 
+/**
+ * Nikki Huynh
+ * MancalaView class is the graphical user interface of the Mancala program. 
+ * Displays the Mancala board, the pits, mancalas, and buttons for user preference.
+ * The class listens for Player movements and updates the board to match the result of their movements.
+ */
 public class MancalaView extends JFrame implements MancalaListener {
     private final JPanel viewPanel;
     private final MancalaBoard board;
@@ -19,6 +25,13 @@ public class MancalaView extends JFrame implements MancalaListener {
     private MancalaController controller;
     private FormatStrategy currentFormat;
 
+    /**
+     * Nikki Huynh
+     * Constructs the MancalaView object with the board and proper formatting.
+     * 
+     * @param board - the MancalaBoard object to represent the current board
+     * @param format - layout of the format the player selected
+     */
     public MancalaView(MancalaBoard board, String format) {
         this.board = board;
         this.pits = new ArrayList<>(14);
@@ -31,10 +44,21 @@ public class MancalaView extends JFrame implements MancalaListener {
         board.attach(this);
     }
     
+    /**
+     * Nikki Huynh
+     * Sets controller in charge of handling the player's input and the logic of the game.
+     * 
+     * @param controller - MancalaController object controller
+     */
     public void setController(MancalaController controller) {
         this.controller = controller;
     }
     
+    /**
+     * Nikki Huynh
+     * Changes the stones in the pits after player has made a move.
+     * Only called when the board has been updated or changed.
+     */
     @Override
     public void changed() {
         for (int i = 0; i < pits.size(); i++) {
@@ -46,18 +70,34 @@ public class MancalaView extends JFrame implements MancalaListener {
         repaint();
     }
     
+    /**
+     * Returns the undo button.
+     * @return undo button
+     */
     public JButton getUndoButton() {
         return undoButton;
     }
     
+    /**
+     * Returns the next turn button.
+     * @return next turn button
+     */
     public JButton getNextTurnButton() {
         return nextTurnButton;
     }
     
+    /**
+     * Returns the ArrayList of pits from the view.
+     * @return list of Pit objects
+     */
     public ArrayList<Pit> getPitList() {
         return pits;
     }
     
+    /**
+     * Returns the view panel.
+     * @return view panel
+     */
     public JPanel getPanel() {
         return viewPanel;
     }

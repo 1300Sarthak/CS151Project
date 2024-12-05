@@ -9,12 +9,24 @@ package mancala;
 import java.awt.*;
 import javax.swing.*;
 
+/**
+ * The Pit class represents the pits in the game. 
+ * Pit is either classified as the regular pit or the Player's Mancala.
+ * This class keeps track of the initial stones in the pit and the labels of each pit.
+ */
 public class Pit extends JPanel {
     private final String pitName;
     private int stoneCount;
     private final boolean isMancala;
     private final int index;
 
+    /**
+     * Constructor for the pit.
+     * @param pitName - the name of the pit.
+     * @param stoneCount - the number of stones in the pit
+     * @param isMancala - check whether the pit is a Mancala or a regular pit
+     * @param index - the index of the pit on the board
+     */
     public Pit(String pitName, int stoneCount, boolean isMancala, int index) 
     {
         this.pitName = pitName;
