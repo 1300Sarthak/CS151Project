@@ -71,6 +71,7 @@ public class MancalaView extends JFrame implements MancalaListener {
     }
     
     /**
+     * Nikki Huynh
      * Returns the undo button.
      * @return undo button
      */
@@ -79,6 +80,7 @@ public class MancalaView extends JFrame implements MancalaListener {
     }
     
     /**
+     * Nikki Huynh
      * Returns the next turn button.
      * @return next turn button
      */
@@ -87,6 +89,7 @@ public class MancalaView extends JFrame implements MancalaListener {
     }
     
     /**
+     * Sarthak Sethi
      * Returns the ArrayList of pits from the view.
      * @return list of Pit objects
      */
@@ -95,6 +98,7 @@ public class MancalaView extends JFrame implements MancalaListener {
     }
     
     /**
+     * Vincent Pangilinan
      * Returns the view panel.
      * @return view panel
      */
@@ -103,6 +107,7 @@ public class MancalaView extends JFrame implements MancalaListener {
     }
     
     /**
+     * Vincent Pangilinan
      * Context for the strategy pattern. Updates the style of the board.
      * @param format the name of the formatting pattern.
      */

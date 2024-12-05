@@ -10,6 +10,7 @@ import java.awt.*;
 import javax.swing.*;
 
 /**
+ * Nikki Huynh
  * The Pit class represents the pits in the game. 
  * Pit is either classified as the regular pit or the Player's Mancala.
  * This class keeps track of the initial stones in the pit and the labels of each pit.
@@ -21,6 +22,7 @@ public class Pit extends JPanel {
     private final int index;
 
     /**
+     * Vincent Pangilinan
      * Constructor for the pit.
      * @param pitName - the name of the pit.
      * @param stoneCount - the number of stones in the pit

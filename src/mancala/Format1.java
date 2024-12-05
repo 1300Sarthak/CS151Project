@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import javax.swing.*;
 
 /**
+ * Sarthak Sethi
  * Concrete strategy class that implements abstract class (FormatStrategy).
  * Format 1 class sets up the format and style for the elements for the Mancala Board.
  * This is the default format, may be changed it player selects "Format2". 
@@ -37,6 +38,12 @@ public class Format1 implements FormatStrategy {
         initializeBoard(board);
     }
 
+    /**
+     * Nikki Huynh
+     * Sets up the format and style for the elements for the Mancala Board.
+     * Sets up the format and the style and size of the pits and mancalas.
+     * @param board - MancalaBoard board object for the model.
+     */
     private void initializeBoard(MancalaBoard board) {
         JPanel pitsPanel = new JPanel(new GridLayout(2, 6, 10, 10)); 
         pitsPanel.setOpaque(false);
@@ -91,6 +98,7 @@ public class Format1 implements FormatStrategy {
     }
 
     /**
+     * Vincent Pangilinan
      * Returns the panel for the interface.
      * @return Jpanel panel for the layout and interface.
      */
@@ -99,6 +107,7 @@ public class Format1 implements FormatStrategy {
     }
     
     /**
+     * Sarthak Sethi
      * Returns the ArrayList of pits used for the mancala board.
      * @return Pit's pits object that contains the stones for the game.
      */

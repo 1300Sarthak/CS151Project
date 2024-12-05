@@ -34,6 +34,12 @@ public class MancalaGUI {
         initializeUI();
     }
 
+    /**
+     * Vincent Pangilinan
+     * Initializes the main GUI window.
+     * Sets up the JFrame and its components, including the
+     * status panel, game board, and control panel.
+     */
     private void initializeUI() {
         JFrame frame = new JFrame("Mancala");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -102,6 +108,12 @@ public class MancalaGUI {
         frame.setVisible(true);
     }
 
+        /**
+         * Nikki Huynh
+         * Entry point for the application.
+         * Creates a new instance of the MancalaGUI class on the Event-Dispatching thread.
+         * @param args the command line arguments
+         */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(MancalaGUI::new);
     }

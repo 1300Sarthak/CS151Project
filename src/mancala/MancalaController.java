@@ -98,7 +98,7 @@ public class MancalaController {
         }
 
      /**
-      * Sarthak Sethi
+      * Nikki Huynh
       * Handles pit click events. Updates the board and view if the move is valid, and
       * checks for game over conditions.
       */
@@ -121,7 +121,7 @@ public class MancalaController {
         
         /**
          * 
-         * Sarthak Sethi
+         * Vincent Pangilinan
          * Checks if a given move is valid. A move is invalid if
          * the pit is empty, or if it's not the current player's turn.
          * Shows an error message if the move is invalid.
