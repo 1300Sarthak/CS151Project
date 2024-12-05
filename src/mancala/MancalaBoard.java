@@ -14,9 +14,7 @@ public class MancalaBoard {
     private boolean canUndo; // Track if undo is allowed
 
     public MancalaBoard(int initialStones) {
-        //pits[0, 6] to be player A's mancala side, with 6 being Mancala A, and [7, 13] for player B, with 13 being Mancala B.
         board = new ArrayList<>(14);
-        //pits = new int[14];
         for (int i = 0; i < 14; i++)
         {
             if(i != 6 && i != 13) {
