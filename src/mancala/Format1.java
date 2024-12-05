@@ -1,14 +1,30 @@
 package mancala;
 
+/**
+ * Format1.java : Fall 2024 Dr. Kim's CS151 Team Project Solution.
+ * @author Sarthak Sethi, Vincent Pangilinan, Nikki Huynh.
+ * @version 1.0 12/4/2024
+ */
 import java.awt.*;
 import java.util.ArrayList;
 import javax.swing.*;
 
+/**
+ * Concrete strategy class that implements abstract class (FormatStrategy).
+ * Format 1 class sets up the format and style for the elements for the Mancala Board.
+ * This is the default format, may be changed it player selects "Format2". 
+ */
 public class Format1 implements FormatStrategy {
     private final JPanel panel;
     private final ArrayList<Pit> pits;
     private final MancalaBoard board;
 
+    /**
+     * Nikki Huynh
+     * Constructs the Format1 view for the Mancala game.
+     * Initializes the mancala board's layout and colors, as well as setting the number of stones in the pit the player selected.
+     * @param board - MancalaBoard board object for the model.
+     */
     public Format1(MancalaBoard board) {
         this.board = board;
         this.panel = new JPanel();
@@ -74,10 +90,18 @@ public class Format1 implements FormatStrategy {
         return pit;
     }
 
+    /**
+     * Returns the panel for the interface.
+     * @return Jpanel panel for the layout and interface.
+     */
     public JPanel getPanel() {
         return panel;
     }
-       
+    
+    /**
+     * Returns the ArrayList of pits used for the mancala board.
+     * @return Pit's pits object that contains the stones for the game.
+     */
     public ArrayList<Pit> getPits() {
         return pits;
     }
